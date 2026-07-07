@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Environments
+.venv/
+venv/
+env/
+envs/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Data, checkpoints, and generated artifacts
+*.h5
+*.hdf5
+*.zst
+*.tar
+*.tar.*
+*.ckpt
+*.pt
+*.pth
+checkpoints/
+data/
+datasets/
+downloads/
+outputs/
+runs/
+wandb/
+logs/
+artifacts/
+
+# OS/editor noise
+.DS_Store
+.vscode/
+.idea/
