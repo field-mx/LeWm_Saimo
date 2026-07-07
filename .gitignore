@@ -25,15 +25,15 @@ envs/
 *.ckpt
 *.pt
 *.pth
-checkpoints/
-data/
-datasets/
-downloads/
-outputs/
-runs/
+/checkpoints/
+/data/
+/datasets/
+/downloads/
+/outputs/
+/runs/
 wandb/
-logs/
-artifacts/
+/logs/
+/artifacts/
 
 # OS/editor noise
 .DS_Store
