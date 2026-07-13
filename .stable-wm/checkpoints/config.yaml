@@ -1,0 +1,97 @@
+output_model_name: pusht/lewm_8gpu
+subdir: ${hydra:job.id}
+num_workers: 6
+train_split: 0.9
+seed: 3072
+img_size: 224
+embed_dim: 192
+history_size: 3
+trainer:
+  max_epochs: 2
+  devices: 8
+  accelerator: gpu
+  precision: bf16
+  gradient_clip_val: 1.0
+  enable_progress_bar: true
+  log_every_n_steps: 1
+loader:
+  batch_size: 64
+  num_workers: ${num_workers}
+  persistent_workers: true
+  prefetch_factor: 3
+  pin_memory: true
+optimizer:
+  type: AdamW
+  lr: 5.0e-05
+  weight_decay: 0.001
+num_preds: 1
+loss:
+  sigreg:
+    weight: 0.09
+    kwargs:
+      knots: 17
+      num_proj: 1024
+wandb:
+  enabled: false
+  config:
+    entity: lewm
+    project: lewm
+    name: ${output_model_name}
+    id: ${subdir}
+    resume: allow
+    log_model: false
+data:
+  dataset:
+    num_steps: ${eval:'${num_preds} + ${history_size}'}
+    frameskip: 5
+    name: /home/muxiang/work/LeWm_Saimo/data/pusht_expert_train.h5
+    keys_to_load:
+    - pixels
+    - action
+    - proprio
+    - state
+    keys_to_cache:
+    - action
+    - proprio
+    - state
+model:
+  _target_: jepa.JEPA
+  encoder:
+    _target_: stable_pretraining.backbone.utils.vit_hf
+    size: tiny
+    patch_size: 14
+    image_size: ${img_size}
+    pretrained: false
+    use_mask_token: false
+  predictor:
+    _target_: module.ARPredictor
+    num_frames: ${history_size}
+    input_dim: ${embed_dim}
+    hidden_dim: ${embed_dim}
+    output_dim: ${embed_dim}
+    depth: 6
+    heads: 16
+    mlp_dim: 2048
+    dim_head: 64
+    dropout: 0.1
+    emb_dropout: 0.0
+  action_encoder:
+    _target_: module.Embedder
+    input_dim: 10
+    emb_dim: ${embed_dim}
+  projector:
+    _target_: module.MLP
+    input_dim: ${embed_dim}
+    output_dim: ${embed_dim}
+    hidden_dim: 2048
+    norm_fn:
+      _target_: torch.nn.BatchNorm1d
+      _partial_: true
+  pred_proj:
+    _target_: module.MLP
+    input_dim: ${embed_dim}
+    output_dim: ${embed_dim}
+    hidden_dim: 2048
+    norm_fn:
+      _target_: torch.nn.BatchNorm1d
+      _partial_: true

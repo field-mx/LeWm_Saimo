@@ -13,7 +13,21 @@ from omegaconf import OmegaConf, open_dict
 from module import SIGReg
 from utils import get_column_normalizer, get_img_preprocessor, SaveCkptCallback
 
+# 训练命令：
+'''
 
+pkill -u muxiang -f /home/muxiang/work/LeWm_Saimo/train.py
+nvidia-smi
+
+tmux new -s train8
+
+cd /home/muxiang/work/LeWm_Saimo
+source /publicworkspace/envs/le-wm-py310/bin/activate
+
+NCCL_DEBUG=INFO NCCL_P2P_DISABLE=1 NCCL_IB_DISABLE=1 \
+CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 \
+python train.py output_model_name=pusht/lewm_8gpu
+'''
 def lejepa_forward(self, batch, stage, cfg):
     """encode observations, predict next states, compute losses."""
 
@@ -52,7 +66,7 @@ def run(cfg):
 
     dataset_cfg = OmegaConf.to_container(cfg.data.dataset, resolve=True)
     dataset_name = dataset_cfg.pop("name")
-    cache_dir = os.environ.get("LOCAL_DATASET_DIR", None)
+    cache_dir = os.environ.get("work/LeWm_Saimo/data", None)
     dataset = swm.data.load_dataset(
         dataset_name, transform=None, cache_dir=cache_dir, **dataset_cfg
     )
