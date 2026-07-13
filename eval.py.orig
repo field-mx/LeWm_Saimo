@@ -52,39 +52,6 @@ def get_episodes_length(dataset, episodes):
     )
 
 
-def get_episode_bounds(dataset, episodes):
-    col_name = "episode_idx" if "episode_idx" in dataset.column_names else "ep_idx"
-
-    episode_idx = np.asarray(dataset.get_col_data(col_name))
-    episode_ids, first_indices = np.unique(episode_idx, return_index=True)
-    order = np.argsort(first_indices)
-    episode_ids = episode_ids[order]
-    first_indices = first_indices[order]
-    lengths = np.diff(np.append(first_indices, len(episode_idx)))
-    first_by_episode = dict(zip(episode_ids.tolist(), first_indices.tolist()))
-    length_by_episode = dict(zip(episode_ids.tolist(), lengths.tolist()))
-    first_rows = np.asarray(
-        [first_by_episode[episode_id] for episode_id in episodes],
-        dtype=np.int64,
-    )
-    episode_lengths = np.asarray(
-        [length_by_episode[episode_id] for episode_id in episodes],
-        dtype=np.int64,
-    )
-    return first_rows, episode_lengths
-
-
-def find_contact_start(states, distance_threshold):
-    states = np.asarray(states)
-    agent_pos = states[:, :2]
-    block_pos = states[:, 2:4]
-    distances = np.linalg.norm(agent_pos - block_pos, axis=1)
-    contact_indices = np.nonzero(distances <= float(distance_threshold))[0]
-    if len(contact_indices) == 0:
-        return None
-    return int(contact_indices[0])
-
-
 def get_dataset(cfg, dataset_name):
     dataset_path = Path(cfg.cache_dir or swm.data.utils.get_cache_dir())
     dataset = swm.data.HDF5Dataset(
@@ -251,47 +218,21 @@ def evaluate_sequential_subgoals(
         reached = was_active & world.terminateds
         timed_out = was_active & (segment_steps >= int(segment_budget))
         truncated = was_active & world.truncateds
+        advance = reached
         flush = np.zeros(num_envs, dtype=bool)
 
-        for env_idx in np.where(reached)[0]:
+        for env_idx in np.where(advance)[0]:
             target_idx = target_indices[env_idx]
-            segment_successes[env_idx, target_idx] = True
-            print(
-                f"[env {env_idx}] reached expert frame {offsets[target_idx]} "
-                f"on attempt {segment_attempts[env_idx, target_idx]}."
-            )
+            segment_successes[env_idx, target_idx] = reached[env_idx]
             if target_idx == len(offsets) - 1:
-                final_successes[env_idx] = True
+                final_successes[env_idx] = reached[env_idx]
                 active[env_idx] = False
                 continue
 
             target_indices[env_idx] += 1
-            next_target_idx = target_indices[env_idx]
-            current_offsets[env_idx] = offsets[next_target_idx]
+            current_offsets[env_idx] = offsets[target_indices[env_idx]]
             segment_steps[env_idx] = 0
-            retry_counts[env_idx] = 0
-            segment_attempts[env_idx, next_target_idx] = 1
             flush[env_idx] = True
-
-        failed_attempt = timed_out & ~reached
-        for env_idx in np.where(failed_attempt)[0]:
-            target_idx = target_indices[env_idx]
-            if retry_counts[env_idx] < int(max_subgoal_retries):
-                retry_counts[env_idx] += 1
-                segment_attempts[env_idx, target_idx] += 1
-                segment_steps[env_idx] = 0
-                flush[env_idx] = True
-                print(
-                    f"[env {env_idx}] retrying expert frame "
-                    f"{offsets[target_idx]} "
-                    f"({retry_counts[env_idx]}/{max_subgoal_retries})."
-                )
-            else:
-                active[env_idx] = False
-                print(
-                    f"[env {env_idx}] failed expert frame "
-                    f"{offsets[target_idx]} after {max_attempts} attempts."
-                )
 
         active[truncated] = False
 
@@ -314,10 +255,7 @@ def evaluate_sequential_subgoals(
                 world.truncateds[env_idx] = False
             world.infos["_needs_flush"] = flush
 
-    dataset_videos = [
-        trajectory["pixels"][: len(agent_frames[i])]
-        for i, trajectory in enumerate(trajectories)
-    ]
+    dataset_videos = [trajectory["pixels"] for trajectory in trajectories]
     save_panel_videos(
         video_dir,
         {
@@ -327,19 +265,11 @@ def evaluate_sequential_subgoals(
         },
     )
 
-    attempted_segments = segment_attempts > 0
-    segment_success_rate = (
-        float(segment_successes[attempted_segments].mean() * 100.0)
-        if attempted_segments.any()
-        else 0.0
-    )
-
     return {
         "success_rate": float(final_successes.mean() * 100.0),
         "episode_successes": final_successes,
-        "segment_success_rate": segment_success_rate,
+        "segment_success_rate": float(segment_successes.mean() * 100.0),
         "segment_successes": segment_successes,
-        "segment_attempts": segment_attempts,
         "subgoal_offsets": np.asarray(offsets),
         "rollout_steps": rollout_steps,
         "seeds": init_state.get("seed"),
@@ -379,43 +309,23 @@ def rename_saved_videos(video_dir, video_name, num_videos):
 @hydra.main(version_base=None, config_path="./config/eval", config_name="pusht")
 def run(cfg: DictConfig):
     """Run evaluation of dinowm vs random policy."""
-    plan_steps = int(cfg.plan_config.horizon) * int(cfg.plan_config.action_block)
-    execute_steps = int(cfg.plan_config.receding_horizon) * int(
-        cfg.plan_config.action_block
-    )
-    assert plan_steps <= cfg.eval.eval_budget, (
-        "Planning horizon must be smaller than or equal to eval_budget"
-    )
+    assert (
+        cfg.plan_config.horizon * cfg.plan_config.action_block <= cfg.eval.eval_budget
+    ), "Planning horizon must be smaller than or equal to eval_budget"
 
     # create world environment
     sequential = bool(cfg.eval.get("sequential_subgoals", False))
-    max_task_steps = int(cfg.eval.get("max_task_steps", cfg.eval.goal_offset_steps))
-    max_subgoal_retries = int(cfg.eval.get("max_subgoal_retries", 0))
-    if max_subgoal_retries < 0:
-        raise ValueError("eval.max_subgoal_retries must be zero or greater.")
+    final_offset = int(
+        cfg.eval.get("full_task_steps", cfg.eval.goal_offset_steps)
+    )
     if sequential:
-        if int(cfg.eval.num_eval) != 1:
-            raise ValueError(
-                "Sequential full-trajectory evaluation currently requires "
-                "eval.num_eval: 1 so one complete expert trajectory maps to one video."
-            )
-        if execute_steps != plan_steps:
-            raise ValueError(
-                "For 25-step PushT subgoals, set plan_config.receding_horizon "
-                "equal to plan_config.horizon so each inference is fully executed."
-            )
-        if int(cfg.eval.goal_offset_steps) != plan_steps:
-            raise ValueError(
-                "For official 25-step PushT inference, eval.goal_offset_steps "
-                "must equal plan_config.horizon * plan_config.action_block."
-            )
-        max_offsets = build_subgoal_offsets(max_task_steps, cfg.eval.goal_offset_steps)
-        max_rollout_steps = (
-            len(max_offsets) * int(cfg.eval.eval_budget) * (max_subgoal_retries + 1)
+        subgoal_offsets = build_subgoal_offsets(
+            final_offset, cfg.eval.goal_offset_steps
         )
+        max_rollout_steps = len(subgoal_offsets) * int(cfg.eval.eval_budget)
     else:
         max_rollout_steps = int(cfg.eval.eval_budget)
-    cfg.world.max_episode_steps = max_rollout_steps + 1
+    cfg.world.max_episode_steps = 2 * max_rollout_steps
     world = swm.World(**cfg.world, image_shape=(224, 224))
 
     # create the transform
@@ -465,75 +375,34 @@ def run(cfg: DictConfig):
 
     # sample the episodes and the starting indices
     episode_len = get_episodes_length(dataset, ep_indices)
+    required_goal_offset = final_offset if sequential else cfg.eval.goal_offset_steps
+    max_start_idx = episode_len - required_goal_offset - 1
+    max_start_idx_dict = {ep_id: max_start_idx[i] for i, ep_id in enumerate(ep_indices)}
+    # Map each dataset row’s episode_idx to its max_start_idx
+    col_name = "episode_idx" if "episode_idx" in dataset.column_names else "ep_idx"
+    max_start_per_row = np.array(
+        [max_start_idx_dict[ep_id] for ep_id in dataset.get_col_data(col_name)]
+    )
+
+    # remove all the lines of dataset for which dataset['step_idx'] > max_start_per_row
+    valid_mask = dataset.get_col_data("step_idx") <= max_start_per_row
+    valid_indices = np.nonzero(valid_mask)[0]
+    print(valid_mask.sum(), "valid starting points found for evaluation.")
+
+    if len(valid_indices) < cfg.eval.num_eval:
+        raise ValueError(
+            "Not enough valid starting points for the requested num_eval."
+        )
+
     g = np.random.default_rng(cfg.seed)
-    if sequential:
-        episode_first_rows, episode_len = get_episode_bounds(dataset, ep_indices)
-        all_states = np.asarray(dataset.get_col_data("state"))
-        contact_starts = np.full(len(ep_indices), -1, dtype=np.int64)
-        remaining_steps = np.full(len(ep_indices), -1, dtype=np.int64)
-        contact_distance_threshold = float(
-            cfg.eval.get("contact_distance_threshold", 85.0)
-        )
+    random_episode_indices = np.sort(
+        g.choice(valid_indices, size=cfg.eval.num_eval, replace=False)
+    )
 
-        for i, first_row in enumerate(episode_first_rows):
-            states = all_states[first_row : first_row + episode_len[i]]
-            contact_start = find_contact_start(states, contact_distance_threshold)
-            if contact_start is None:
-                continue
-            contact_starts[i] = contact_start
-            remaining_steps[i] = episode_len[i] - contact_start - 1
+    print(random_episode_indices)
 
-        eligible = (remaining_steps > 0) & (remaining_steps <= max_task_steps)
-        if not eligible.any():
-            raise ValueError(
-                "No complete expert episodes have contact-start task steps less "
-                f"than or equal to eval.max_task_steps={max_task_steps}. "
-                "Try increasing eval.max_task_steps or "
-                "eval.contact_distance_threshold."
-            )
-
-        final_offset = int(remaining_steps[eligible].max())
-        candidate_mask = eligible & (remaining_steps == final_offset)
-        candidate_positions = np.nonzero(candidate_mask)[0]
-        selected_pos = int(g.choice(candidate_positions))
-        selected_episode = ep_indices[selected_pos]
-        contact_start = int(contact_starts[selected_pos])
-        eval_episodes = np.asarray([selected_episode])
-        eval_start_idx = np.asarray([contact_start], dtype=np.int64)
-        print(
-            f"Selected complete expert episode {selected_episode}: "
-            f"contact starts at frame {contact_start}, "
-            f"{final_offset + 1} frames / {final_offset} environment steps "
-            "remain. "
-            f"Subgoals: {build_subgoal_offsets(final_offset, cfg.eval.goal_offset_steps)}"
-        )
-    else:
-        max_start_idx = episode_len - cfg.eval.goal_offset_steps - 1
-        max_start_idx_dict = {
-            ep_id: max_start_idx[i] for i, ep_id in enumerate(ep_indices)
-        }
-        col_name = "episode_idx" if "episode_idx" in dataset.column_names else "ep_idx"
-        max_start_per_row = np.array(
-            [max_start_idx_dict[ep_id] for ep_id in dataset.get_col_data(col_name)]
-        )
-
-        valid_mask = dataset.get_col_data("step_idx") <= max_start_per_row
-        valid_indices = np.nonzero(valid_mask)[0]
-        print(valid_mask.sum(), "valid starting points found for evaluation.")
-
-        if len(valid_indices) < cfg.eval.num_eval:
-            raise ValueError(
-                "Not enough valid starting points for the requested num_eval."
-            )
-
-        random_episode_indices = np.sort(
-            g.choice(valid_indices, size=cfg.eval.num_eval, replace=False)
-        )
-
-        print(random_episode_indices)
-
-        eval_episodes = dataset.get_row_data(random_episode_indices)[col_name]
-        eval_start_idx = dataset.get_row_data(random_episode_indices)["step_idx"]
+    eval_episodes = dataset.get_row_data(random_episode_indices)[col_name]
+    eval_start_idx = dataset.get_row_data(random_episode_indices)["step_idx"]
 
     if len(eval_episodes) < cfg.eval.num_eval:
         raise ValueError("Not enough episodes with sufficient length for evaluation.")
@@ -556,14 +425,9 @@ def run(cfg: DictConfig):
             subgoal_interval=cfg.eval.goal_offset_steps,
             final_offset=final_offset,
             segment_budget=cfg.eval.eval_budget,
-            max_subgoal_retries=max_subgoal_retries,
             callables=callables,
             video_dir=video_dir,
         )
-        metrics["selected_episode"] = eval_episodes.copy()
-        metrics["selected_start_step"] = eval_start_idx.copy()
-        metrics["selected_expert_frames"] = np.asarray([final_offset + 1])
-        metrics["selected_task_steps"] = np.asarray([final_offset])
     else:
         metrics = world.evaluate(
             dataset=dataset,

@@ -25,18 +25,14 @@ policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-
 
 plan_config:
   horizon: 5
-  receding_horizon: 5
+  receding_horizon: 1
   action_block: 5 # frameskip
 
 # evaluation from dataset (replay expert trajectories)
 eval:
-  num_eval: 1 # number of episodes to evaluate
-  sequential_subgoals: true
-  max_task_steps: 200 # select a complete expert task with steps <= this value
-  contact_distance_threshold: 85 # start from first agent/block center distance <= this
-  goal_offset_steps: 25 # subgoal interval in env steps/raw dataset frames
-  eval_budget: 50 # maximum environment steps allowed per subgoal
-  max_subgoal_retries: 5 # extra retries per subgoal after the first attempt
+  num_eval: 10 # number of episodes to evaluate
+  goal_offset_steps: 25
+  eval_budget: 50
   img_size: 224
   dataset_name: pusht_expert_train
   callables:

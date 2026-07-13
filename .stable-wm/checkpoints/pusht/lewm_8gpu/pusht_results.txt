@@ -1,0 +1,888 @@
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 1000
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 1
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: true
+  full_task_steps: 245
+  goal_offset_steps: 25
+  eval_budget: 50
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'segment_success_rate': 0.0, 'segment_successes': array([[False, False, False, False, False, False, False, False, False,
+        False]]), 'subgoal_offsets': array([ 25,  50,  75, 100, 125, 150, 175, 200, 225, 245]), 'rollout_steps': array([500]), 'seeds': None}
+evaluation_time: 392.6950943470001 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 2500
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 1
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: true
+  full_task_steps: 245
+  goal_offset_steps: 10
+  eval_budget: 50
+  max_subgoal_retries: 3
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'segment_success_rate': 0.0, 'segment_successes': array([[False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False]]), 'subgoal_offsets': array([ 10,  20,  30,  40,  50,  60,  70,  80,  90, 100, 110, 120, 130,
+       140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 245]), 'rollout_steps': array([1250]), 'seeds': None}
+evaluation_time: 235.77997255325317 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 1200
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 1
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: true
+  full_task_steps: 120
+  goal_offset_steps: 10
+  eval_budget: 50
+  max_subgoal_retries: 3
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'segment_success_rate': 16.666666666666664, 'segment_successes': array([[ True,  True, False, False, False, False, False, False, False,
+        False, False, False]]), 'subgoal_offsets': array([ 10,  20,  30,  40,  50,  60,  70,  80,  90, 100, 110, 120]), 'rollout_steps': array([600]), 'seeds': None}
+evaluation_time: 502.3513181209564 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 1001
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: true
+  max_task_steps: 120
+  goal_offset_steps: 25
+  eval_budget: 50
+  max_subgoal_retries: 3
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'segment_success_rate': 50.0, 'segment_successes': array([[ True, False, False, False, False]]), 'segment_attempts': array([[1, 4, 0, 0, 0]]), 'subgoal_offsets': array([ 25,  50,  75, 100, 120]), 'rollout_steps': array([227]), 'seeds': None, 'selected_episode': array([6785]), 'selected_expert_frames': array([121]), 'selected_task_steps': array([120])}
+evaluation_time: 171.1856825351715 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 501
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: true
+  max_task_steps: 120
+  goal_offset_steps: 25
+  eval_budget: 25
+  max_subgoal_retries: 3
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'segment_success_rate': 0.0, 'segment_successes': array([[False, False, False, False, False]]), 'segment_attempts': array([[4, 0, 0, 0, 0]]), 'subgoal_offsets': array([ 25,  50,  75, 100, 120]), 'rollout_steps': array([100]), 'seeds': None, 'selected_episode': array([6785]), 'selected_expert_frames': array([121]), 'selected_task_steps': array([120])}
+evaluation_time: 69.27311420440674 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 801
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: true
+  max_task_steps: 180
+  goal_offset_steps: 25
+  eval_budget: 25
+  max_subgoal_retries: 3
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'segment_success_rate': 0.0, 'segment_successes': array([[False, False, False, False, False, False, False, False]]), 'segment_attempts': array([[4, 0, 0, 0, 0, 0, 0, 0]]), 'subgoal_offsets': array([ 25,  50,  75, 100, 125, 150, 175, 177]), 'rollout_steps': array([100]), 'seeds': None, 'selected_episode': array([15967]), 'selected_expert_frames': array([178]), 'selected_task_steps': array([177])}
+evaluation_time: 69.75908255577087 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 801
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: true
+  max_task_steps: 180
+  goal_offset_steps: 25
+  eval_budget: 25
+  max_subgoal_retries: 3
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'segment_success_rate': 50.0, 'segment_successes': array([[ True, False, False, False, False, False, False, False]]), 'segment_attempts': array([[1, 4, 0, 0, 0, 0, 0, 0]]), 'subgoal_offsets': array([ 25,  50,  75, 100, 125, 150, 175, 177]), 'rollout_steps': array([101]), 'seeds': None, 'selected_episode': array([15967]), 'selected_expert_frames': array([178]), 'selected_task_steps': array([177])}
+evaluation_time: 174.83613777160645 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 801
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: true
+  max_task_steps: 180
+  goal_offset_steps: 25
+  eval_budget: 25
+  max_subgoal_retries: 3
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'segment_success_rate': 50.0, 'segment_successes': array([[ True, False, False, False, False, False, False, False]]), 'segment_attempts': array([[1, 4, 0, 0, 0, 0, 0, 0]]), 'subgoal_offsets': array([ 25,  50,  75, 100, 125, 150, 175, 177]), 'rollout_steps': array([101]), 'seeds': None, 'selected_episode': array([15967]), 'selected_expert_frames': array([178]), 'selected_task_steps': array([177])}
+evaluation_time: 175.41857028007507 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 51
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 180
+  goal_offset_steps: 25
+  eval_budget: 50
+  max_subgoal_retries: 3
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 100.0, 'episode_successes': array([ True]), 'seeds': None}
+evaluation_time: 1.4148988723754883 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 51
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 180
+  goal_offset_steps: 25
+  eval_budget: 50
+  max_subgoal_retries: 3
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 100.0, 'episode_successes': array([ True]), 'seeds': None}
+evaluation_time: 1.4258310794830322 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 51
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 180
+  goal_offset_steps: 25
+  eval_budget: 50
+  max_subgoal_retries: 3
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 100.0, 'episode_successes': array([ True]), 'seeds': None}
+evaluation_time: 1.58467698097229 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 1601
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: true
+  max_task_steps: 180
+  goal_offset_steps: 25
+  eval_budget: 50
+  max_subgoal_retries: 3
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'segment_success_rate': 0.0, 'segment_successes': array([[False, False, False, False, False, False, False, False]]), 'segment_attempts': array([[4, 0, 0, 0, 0, 0, 0, 0]]), 'subgoal_offsets': array([ 25,  50,  75, 100, 125, 150, 175, 177]), 'rollout_steps': array([200]), 'seeds': None, 'selected_episode': array([15967]), 'selected_expert_frames': array([178]), 'selected_task_steps': array([177])}
+evaluation_time: 127.87404108047485 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 1601
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: true
+  max_task_steps: 180
+  contact_distance_threshold: 85
+  goal_offset_steps: 25
+  eval_budget: 50
+  max_subgoal_retries: 3
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'segment_success_rate': 50.0, 'segment_successes': array([[ True, False, False, False, False, False, False, False]]), 'segment_attempts': array([[1, 4, 0, 0, 0, 0, 0, 0]]), 'subgoal_offsets': array([ 25,  50,  75, 100, 125, 150, 175, 177]), 'rollout_steps': array([225]), 'seeds': None, 'selected_episode': array([16152]), 'selected_start_step': array([19]), 'selected_expert_frames': array([178]), 'selected_task_steps': array([177])}
+evaluation_time: 169.37408185005188 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 2401
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: true
+  max_task_steps: 180
+  contact_distance_threshold: 85
+  goal_offset_steps: 25
+  eval_budget: 50
+  max_subgoal_retries: 5
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'segment_success_rate': 50.0, 'segment_successes': array([[ True, False, False, False, False, False, False, False]]), 'segment_attempts': array([[1, 6, 0, 0, 0, 0, 0, 0]]), 'subgoal_offsets': array([ 25,  50,  75, 100, 125, 150, 175, 177]), 'rollout_steps': array([325]), 'seeds': None, 'selected_episode': array([16152]), 'selected_start_step': array([19]), 'selected_expert_frames': array([178]), 'selected_task_steps': array([177])}
+evaluation_time: 253.79224157333374 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 2401
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: true
+  max_task_steps: 200
+  contact_distance_threshold: 85
+  goal_offset_steps: 25
+  eval_budget: 50
+  max_subgoal_retries: 5
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'segment_success_rate': 50.0, 'segment_successes': array([[ True, False, False, False, False, False, False, False]]), 'segment_attempts': array([[1, 6, 0, 0, 0, 0, 0, 0]]), 'subgoal_offsets': array([ 25,  50,  75, 100, 125, 150, 175, 198]), 'rollout_steps': array([324]), 'seeds': None, 'selected_episode': array([16247]), 'selected_start_step': array([30]), 'selected_expert_frames': array([199]), 'selected_task_steps': array([198])}
+evaluation_time: 271.728675365448 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 2401
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: true
+  max_task_steps: 200
+  contact_distance_threshold: 85
+  goal_offset_steps: 25
+  eval_budget: 50
+  max_subgoal_retries: 5
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'segment_success_rate': 50.0, 'segment_successes': array([[ True, False, False, False, False, False, False, False]]), 'segment_attempts': array([[1, 6, 0, 0, 0, 0, 0, 0]]), 'subgoal_offsets': array([ 25,  50,  75, 100, 125, 150, 175, 198]), 'rollout_steps': array([324]), 'seeds': None, 'selected_episode': array([16247]), 'selected_start_step': array([30]), 'selected_expert_frames': array([199]), 'selected_task_steps': array([198])}
+evaluation_time: 254.0147693157196 seconds
