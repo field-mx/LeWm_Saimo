@@ -1,9 +1,9 @@
 _target_: stable_worldmodel.solver.CEMSolver
 model: ???
 batch_size: 1
-num_samples: 300
+num_samples: 1000 #每轮采样1000条动作序列
 var_scale: 1.0
-n_steps: 30
-topk: 30
+n_steps: 500 # 迭代500轮
+topk: 50 # 选择前30个最优动作序列
 device: "cuda"
 seed: ${seed}

@@ -24,19 +24,45 @@ policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-
 #/home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu/original/weights.pt
 
 plan_config:
-  horizon: 5
-  receding_horizon: 5
+  horizon: 5 
+  receding_horizon: 1
   action_block: 5 # frameskip
 
 # evaluation from dataset (replay expert trajectories)
 eval:
-  num_eval: 1 # number of episodes to evaluate
-  sequential_subgoals: true
-  max_task_steps: 200 # select a complete expert task with steps <= this value
-  contact_distance_threshold: 85 # start from first agent/block center distance <= this
-  goal_offset_steps: 25 # subgoal interval in env steps/raw dataset frames
-  eval_budget: 50 # maximum environment steps allowed per subgoal
-  max_subgoal_retries: 5 # extra retries per subgoal after the first attempt
+  num_eval: 1 # number of complete expert tasks to evaluate
+  sequential_subgoals: false
+
+  # Expert task selection: contact start -> first verified PushT success.
+  max_task_steps: 200
+  contact_distance_threshold: 10
+  block_goal_position: [256.0, 256.0]
+  block_goal_angle: 0.7853981633974483 # pi / 4
+
+  # The model plans 5 * 5 = 25 env steps and executes 5 before re-planning.
+  goal_offset_steps: 200
+  eval_budget: 300 # maximum number of executed environment actions
+  max_subgoal_retries: 0 # 1 initial attempt + 2 retries
+
+  # Alignment is diagnostic only; it never advances the fixed target.
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+
+  # Intermediate goals preserve the pushing side; final success only checks the T block.
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659 # pi / 9
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659 # pi / 9
+
+  # Stop early when the normalized target error no longer improves.
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+
   img_size: 224
   dataset_name: pusht_expert_train
   callables:

@@ -110,8 +110,8 @@ class ConditionalBlock(nn.Module):
         x = x + gate_mlp * self.mlp(modulate(self.norm2(x), shift_mlp, scale_mlp))
         return x
 
-
-class Block(nn.Module):
+ 
+class Block(nn.Module): 
     """Standard Transformer block"""
 
     def __init__(self, dim, heads, dim_head, mlp_dim, dropout=0.0):

@@ -886,3 +886,2692 @@ output:
 ==== RESULTS ====
 metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'segment_success_rate': 50.0, 'segment_successes': array([[ True, False, False, False, False, False, False, False]]), 'segment_attempts': array([[1, 6, 0, 0, 0, 0, 0, 0]]), 'subgoal_offsets': array([ 25,  50,  75, 100, 125, 150, 175, 198]), 'rollout_steps': array([324]), 'seeds': None, 'selected_episode': array([16247]), 'selected_start_step': array([30]), 'selected_expert_frames': array([199]), 'selected_task_steps': array([198])}
 evaluation_time: 254.0147693157196 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 1201
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 1
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: true
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  goal_offset_steps: 25
+  realign_interval_steps: 5
+  realign_search_window: 75
+  agent_align_weight: 0.2
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  eval_budget: 50
+  max_subgoal_retries: 3
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'reference_subgoal_offsets': array([ 25,  50,  75, 100, 125, 150]), 'progress_offsets': array([108]), 'current_target_offsets': array([133]), 'replan_counts': array([13]), 'target_history': [[25, 28, 46, 48, 51, 122, 123, 124, 126, 129, 130, 131, 132, 133]], 'rollout_steps': array([1200]), 'seeds': None, 'selected_episode': array([4653]), 'selected_start_step': array([9]), 'selected_expert_frames': array([151]), 'selected_task_steps': array([150])}
+evaluation_time: 1017.8200402259827 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 1201
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 1
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: true
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 25
+  eval_budget: 50
+  max_subgoal_retries: 3
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'subgoal_success_rate': 0.0, 'subgoal_successes': array([[False, False, False, False, False, False]]), 'subgoal_attempts': array([[4, 0, 0, 0, 0, 0]]), 'reference_subgoal_offsets': array([ 25,  50,  75, 100, 125, 150]), 'confirmed_offsets': array([0]), 'matched_offsets': array([11]), 'current_target_offsets': array([25]), 'target_history': [[25]], 'matched_history': [[0, 1, 10, 11, 10, 8, 10, 11, 10, 11, 10, 11, 10, 11, 12, 11, 9, 11]], 'stagnation_steps': array([17]), 'failure_reasons': array(['attempts_exhausted'], dtype=object), 'rollout_steps': array([200]), 'seeds': None, 'selected_episode': array([4695]), 'selected_start_step': array([9]), 'selected_expert_frames': array([151]), 'selected_task_steps': array([150])}
+evaluation_time: 168.508043050766 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 51
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 1
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 25
+  eval_budget: 50
+  max_subgoal_retries: 3
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 9.202203512191772 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 51
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 25
+  eval_budget: 50
+  max_subgoal_retries: 3
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 100.0, 'episode_successes': array([ True]), 'seeds': None}
+evaluation_time: 1.6089072227478027 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 51
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 50
+  eval_budget: 50
+  max_subgoal_retries: 3
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 100.0, 'episode_successes': array([ True]), 'seeds': None}
+evaluation_time: 1.7381150722503662 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 51
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 50
+  eval_budget: 50
+  max_subgoal_retries: 3
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 100.0, 'episode_successes': array([ True]), 'seeds': None}
+evaluation_time: 1.719358205795288 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 51
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 100
+  eval_budget: 50
+  max_subgoal_retries: 3
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 2.8435983657836914 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 51
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 50
+  eval_budget: 50
+  max_subgoal_retries: 3
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 100.0, 'episode_successes': array([ True]), 'seeds': None}
+evaluation_time: 1.7395405769348145 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 201
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 100
+  eval_budget: 200
+  max_subgoal_retries: 3
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 9.050644874572754 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 151
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 10
+  receding_horizon: 10
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 100
+  eval_budget: 150
+  max_subgoal_retries: 3
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 6.796422958374023 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 61
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 50
+  eval_budget: 60
+  max_subgoal_retries: 3
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 100.0, 'episode_successes': array([ True]), 'seeds': None}
+evaluation_time: 1.7203738689422607 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 61
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 80
+  eval_budget: 60
+  max_subgoal_retries: 3
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 3.6259634494781494 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 101
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 80
+  eval_budget: 100
+  max_subgoal_retries: 3
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 4.810786962509155 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 61
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 50
+  eval_budget: 60
+  max_subgoal_retries: 3
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 100.0, 'episode_successes': array([ True]), 'seeds': None}
+evaluation_time: 1.7098467350006104 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 111
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 100
+  eval_budget: 110
+  max_subgoal_retries: 3
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 6.099760055541992 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 221
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 200
+  eval_budget: 220
+  max_subgoal_retries: 3
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 9.988316535949707 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 151
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 240
+  eval_budget: 150
+  max_subgoal_retries: 3
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 7.389052867889404 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 201
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 200
+  eval_budget: 200
+  max_subgoal_retries: 3
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 9.13144850730896 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 201
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 40
+  receding_horizon: 40
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 200
+  eval_budget: 200
+  max_subgoal_retries: 3
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 9.145606517791748 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 201
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 200
+  eval_budget: 200
+  max_subgoal_retries: 3
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 9.120711326599121 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 501
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 200
+  eval_budget: 500
+  max_subgoal_retries: 3
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 21.789855241775513 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 501
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 1
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 200
+  eval_budget: 500
+  max_subgoal_retries: 3
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 89.50835633277893 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 301
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 10
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 200
+  eval_budget: 300
+  max_subgoal_retries: 3
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 23.63344383239746 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 301
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 200
+  eval_budget: 300
+  max_subgoal_retries: 3
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 13.977353811264038 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 301
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 2
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 200
+  eval_budget: 300
+  max_subgoal_retries: 3
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 27.717890739440918 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 301
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 60
+  eval_budget: 300
+  max_subgoal_retries: 2
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 100.0, 'episode_successes': array([ True]), 'seeds': None}
+evaluation_time: 1.684826374053955 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 301
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 80
+  eval_budget: 300
+  max_subgoal_retries: 2
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 13.207120418548584 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 101
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 60
+  eval_budget: 100
+  max_subgoal_retries: 2
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 100.0, 'episode_successes': array([ True]), 'seeds': None}
+evaluation_time: 1.698225498199463 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 30
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 101
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 85
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 70
+  eval_budget: 100
+  max_subgoal_retries: 2
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 4.794146537780762 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 300
+  var_scale: 1.0
+  n_steps: 100
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 501
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 10
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 100
+  eval_budget: 500
+  max_subgoal_retries: 2
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 59.78821063041687 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 500
+  var_scale: 1.0
+  n_steps: 100
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 501
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 10
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 100
+  eval_budget: 500
+  max_subgoal_retries: 2
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 89.75271511077881 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 500
+  var_scale: 1.0
+  n_steps: 500
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 201
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 10
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 150
+  eval_budget: 200
+  max_subgoal_retries: 2
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 172.31442022323608 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 1000
+  var_scale: 1.0
+  n_steps: 500
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 201
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 10
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 150
+  eval_budget: 200
+  max_subgoal_retries: 2
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 326.3668167591095 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 1000
+  var_scale: 1.0
+  n_steps: 500
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 221
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 10
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 200
+  eval_budget: 220
+  max_subgoal_retries: 2
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 367.21203327178955 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 1000
+  var_scale: 1.0
+  n_steps: 500
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 221
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 150
+  contact_distance_threshold: 10
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 25
+  eval_budget: 220
+  max_subgoal_retries: 2
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 100.0, 'episode_successes': array([ True]), 'seeds': None}
+evaluation_time: 40.008116722106934 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 500
+  var_scale: 1.0
+  n_steps: 500
+  topk: 30
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 176
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 1
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 200
+  contact_distance_threshold: 10
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 150
+  eval_budget: 175
+  max_subgoal_retries: 0
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 748.5530428886414 seconds
+
+==== CONFIG ====
+cache_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 1000
+  var_scale: 1.0
+  n_steps: 500
+  topk: 50
+  device: cuda
+  seed: ${seed}
+world:
+  env_name: swm/PushT-v1
+  num_envs: ${eval.num_eval}
+  max_episode_steps: 301
+dataset:
+  stats: ${eval.dataset_name}
+  keys_to_cache:
+  - action
+  - proprio
+  - state
+seed: 42
+policy: /publicworkspace/le-wm/shared/data/stable-wm/checkpoints/quentinll/lewm-pusht-mapped/weights.pt
+plan_config:
+  horizon: 5
+  receding_horizon: 1
+  action_block: 5
+eval:
+  num_eval: 1
+  sequential_subgoals: false
+  max_task_steps: 200
+  contact_distance_threshold: 10
+  block_goal_position:
+  - 256.0
+  - 256.0
+  block_goal_angle: 0.7853981633974483
+  goal_offset_steps: 200
+  eval_budget: 300
+  max_subgoal_retries: 0
+  realign_interval_steps: 5
+  realign_search_window: 25
+  agent_align_weight: 1.0
+  agent_relative_align_weight: 1.0
+  block_align_weight: 1.0
+  angle_align_weight: 20.0
+  subgoal_block_position_threshold: 20.0
+  subgoal_block_angle_threshold: 0.3490658503988659
+  subgoal_agent_relative_threshold: 25.0
+  final_block_position_threshold: 20.0
+  final_block_angle_threshold: 0.3490658503988659
+  stagnation_limit_steps: 100
+  stagnation_min_improvement: 0.05
+  img_size: 224
+  dataset_name: pusht_expert_train
+  callables:
+  - method: _set_state
+    args:
+      state:
+        value: state
+  - method: _set_goal_state
+    args:
+      goal_state:
+        value: goal_state
+output:
+  filename: pusht_results.txt
+  video_dir: /home/muxiang/work/LeWm_Saimo/.stable-wm/checkpoints/pusht/lewm_8gpu
+  video_name: pusht_full.mp4
+
+==== RESULTS ====
+metrics: {'success_rate': 0.0, 'episode_successes': array([False]), 'seeds': None}
+evaluation_time: 2441.649170398712 seconds
