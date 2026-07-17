@@ -1,0 +1,8 @@
+- eval.num_eval=1
+- eval.dataset_name=smoke/cube_random
+- eval.eval_budget=25
+- solver.num_samples=8
+- solver.n_steps=2
+- solver.topk=2
+- paths.output_dir=/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/outputs/synthetic
+- output.filename=synthetic_results.txt

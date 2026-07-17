@@ -1,0 +1,43 @@
+{
+  "task": "single-cube horizontal pick-and-place",
+  "seed": 42,
+  "cube_start_xy": [
+    0.425,
+    0.1
+  ],
+  "cube_final_goal_xy": [
+    0.425,
+    -0.1
+  ],
+  "expert_steps": 37,
+  "agent_start_step": 0,
+  "agent_goal_expert_step": 25,
+  "agent_eval_budget": 100,
+  "plan_config": {
+    "horizon": 5,
+    "receding_horizon": 5,
+    "action_block": 5
+  },
+  "cem": {
+    "num_samples": 300,
+    "n_steps": 30,
+    "topk": 30,
+    "var_scale": 1.0
+  },
+  "agent_success": false,
+  "success_rate": 0.0,
+  "action_mean": [
+    -0.05028217164486533,
+    -0.10705356072473994,
+    -0.28915088925812693,
+    0.007443294004612678,
+    0.35135135135135137
+  ],
+  "action_scale": [
+    0.2200026854436841,
+    0.5709352330400019,
+    0.8346263977169961,
+    0.16913890436462956,
+    0.9362436797669605
+  ]
+}
