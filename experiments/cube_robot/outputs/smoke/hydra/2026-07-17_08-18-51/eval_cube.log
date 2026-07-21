@@ -1,0 +1,6 @@
+[2026-07-17 08:18:52,553][OpenGL.acceleratesupport][INFO] - No OpenGL_accelerate module loaded: No module named 'OpenGL_accelerate'
+[2026-07-17 08:18:52,612][absl][INFO] - MUJOCO_GL=egl, attempting to import specified OpenGL backend.
+[2026-07-17 08:18:52,695][absl][INFO] - MuJoCo library version is: 3.10.0
+[2026-07-17 08:18:54,197][root][INFO] - Cached 'action' from '/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/data/datasets/smoke/cube_random.h5'
+[2026-07-17 08:18:58,784][datasets][INFO] - PyTorch version 2.12.1 available.
+[2026-07-17 08:18:58,785][datasets][INFO] - JAX version 0.6.2 available.

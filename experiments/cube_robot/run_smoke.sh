@@ -8,6 +8,8 @@ export HYDRA_FULL_ERROR=1
 cd "$ROOT"
 "$ROOT/.venv/bin/python" make_synthetic_smoke_data.py
 exec "$ROOT/.venv/bin/python" eval_cube.py \
+  paths.output_dir="$ROOT/outputs/smoke" \
+  eval.enforce_paper_protocol=false \
   eval.num_eval=1 \
   eval.dataset_name=smoke/cube_random \
   eval.eval_budget=25 \

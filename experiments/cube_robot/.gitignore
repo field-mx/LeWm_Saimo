@@ -1,0 +1,6 @@
+.hf/
+__pycache__/
+downloads/
+data/
+outputs/actor_bc/
+outputs/actor_bc_smoke/

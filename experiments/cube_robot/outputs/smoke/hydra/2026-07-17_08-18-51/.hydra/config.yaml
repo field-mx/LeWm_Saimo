@@ -1,13 +1,18 @@
-defaults:
-  - solver: cem
-  - _self_
-
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 8
+  var_scale: 1.0
+  n_steps: 2
+  topk: 2
+  device: cuda
+  seed: ${seed}
 paths:
   root: /home/muxiang/work/LeWm_Saimo/experiments/cube_robot
   data_root: ${paths.root}/data
   model_dir: ${paths.root}/model/lewm-cube-mapped
   output_dir: ${paths.root}/outputs/paper
-
 world:
   env_name: swm/OGBCube-v0
   num_envs: ${eval.num_eval}
@@ -19,51 +24,40 @@ world:
   height: 224
   visualize_info: false
   terminate_at_goal: true
-
 dataset:
   keys_to_cache:
-    - action
-
+  - action
 seed: 42
 policy: ${paths.model_dir}
-
 plan_config:
   horizon: 5
   receding_horizon: 5
   action_block: 5
-
 eval:
-  enforce_paper_protocol: true
-  num_eval: 50
+  enforce_paper_protocol: false
+  num_eval: 1
   goal_offset_steps: 25
-  eval_budget: 50
+  eval_budget: 25
   img_size: 224
-  dataset_name: ogbench/cube_single_expert
+  dataset_name: smoke/cube_random
   expected_num_episodes: 10000
   expected_episode_steps: 200
   save_video: true
   callables:
-    - method: set_state
-      args:
-        qpos:
-          value: qpos
-        qvel:
-          value: qvel
-    - method: set_target_pos
-      args:
-        cube_id:
-          value: 0
-          in_dataset: false
-        target_pos:
-          value: goal_privileged_block_0_pos
-        target_quat:
-          value: goal_privileged_block_0_quat
-
+  - method: set_state
+    args:
+      qpos:
+        value: qpos
+      qvel:
+        value: qvel
+  - method: set_target_pos
+    args:
+      cube_id:
+        value: 0
+        in_dataset: false
+      target_pos:
+        value: goal_privileged_block_0_pos
+      target_quat:
+        value: goal_privileged_block_0_quat
 output:
-  filename: cube_paper_results.txt
-
-hydra:
-  job:
-    chdir: false
-  run:
-    dir: ${paths.output_dir}/hydra/${now:%Y-%m-%d_%H-%M-%S}
+  filename: cube_smoke_results.txt

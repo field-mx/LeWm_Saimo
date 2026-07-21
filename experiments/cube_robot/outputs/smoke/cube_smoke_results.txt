@@ -1,0 +1,74 @@
+
+==== CONFIG ====
+solver:
+  _target_: stable_worldmodel.solver.CEMSolver
+  model: ???
+  batch_size: 1
+  num_samples: 8
+  var_scale: 1.0
+  n_steps: 2
+  topk: 2
+  device: cuda
+  seed: 42
+paths:
+  root: /home/muxiang/work/LeWm_Saimo/experiments/cube_robot
+  data_root: /home/muxiang/work/LeWm_Saimo/experiments/cube_robot/data
+  model_dir: /home/muxiang/work/LeWm_Saimo/experiments/cube_robot/model/lewm-cube-mapped
+  output_dir: /home/muxiang/work/LeWm_Saimo/experiments/cube_robot/outputs/paper
+world:
+  env_name: swm/OGBCube-v0
+  num_envs: 1
+  max_episode_steps: 50
+  env_type: single
+  ob_type: states
+  multiview: false
+  width: 224
+  height: 224
+  visualize_info: false
+  terminate_at_goal: true
+dataset:
+  keys_to_cache:
+  - action
+seed: 42
+policy: /home/muxiang/work/LeWm_Saimo/experiments/cube_robot/model/lewm-cube-mapped
+plan_config:
+  horizon: 5
+  receding_horizon: 5
+  action_block: 5
+eval:
+  enforce_paper_protocol: false
+  num_eval: 1
+  goal_offset_steps: 25
+  eval_budget: 25
+  img_size: 224
+  dataset_name: smoke/cube_random
+  expected_num_episodes: 10000
+  expected_episode_steps: 200
+  save_video: true
+  callables:
+  - method: set_state
+    args:
+      qpos:
+        value: qpos
+      qvel:
+        value: qvel
+  - method: set_target_pos
+    args:
+      cube_id:
+        value: 0
+        in_dataset: false
+      target_pos:
+        value: goal_privileged_block_0_pos
+      target_quat:
+        value: goal_privileged_block_0_quat
+output:
+  filename: cube_smoke_results.txt
+
+==== SAMPLED STARTS ====
+dataset_rows: [2]
+episodes: [0]
+start_steps: [3]
+
+==== RESULTS ====
+metrics: {'success_rate': 100.0, 'episode_successes': array([ True]), 'seeds': None}
+evaluation_time: 1.4908628463745117 seconds

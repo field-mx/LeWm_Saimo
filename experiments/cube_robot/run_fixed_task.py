@@ -25,7 +25,7 @@ OUTPUT_DIR = ROOT / "outputs" / "fixed_task"
 SEED = 42
 EXPERT_MAX_STEPS = 300 #专家轨迹最多300条
 GOAL_OFFSET = 25
-EVAL_BUDGET = 100
+EVAL_BUDGET = 50
 IMAGE_SIZE = 224
 
 TASK_START = np.array([[0.425, 0.1]], dtype=np.float64)

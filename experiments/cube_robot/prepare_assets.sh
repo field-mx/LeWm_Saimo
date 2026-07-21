@@ -10,6 +10,8 @@ ARCHIVE="$DOWNLOAD_DIR/cube_single_expert.tar.zst"
 EXPECTED_DATASET="$DATA_ROOT/datasets/ogbench/cube_single_expert.h5"
 
 export HF_HOME="$ROOT/.hf"
+export HF_HUB_DISABLE_XET="${HF_HUB_DISABLE_XET:-1}"
+export HF_HUB_DOWNLOAD_TIMEOUT="${HF_HUB_DOWNLOAD_TIMEOUT:-600}"
 mkdir -p "$MODEL_DIR" "$DOWNLOAD_DIR" "$DATA_ROOT/datasets/ogbench"
 
 "$HF_BIN" download quentinll/lewm-cube config.json weights.pt \

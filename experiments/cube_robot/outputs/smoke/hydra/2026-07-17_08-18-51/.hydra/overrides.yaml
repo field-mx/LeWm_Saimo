@@ -1,0 +1,8 @@
+- eval.enforce_paper_protocol=false
+- eval.num_eval=1
+- eval.dataset_name=smoke/cube_random
+- eval.eval_budget=25
+- solver.num_samples=8
+- solver.n_steps=2
+- solver.topk=2
+- output.filename=cube_smoke_results.txt
