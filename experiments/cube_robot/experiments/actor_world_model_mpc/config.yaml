@@ -1,0 +1,33 @@
+paths:
+  model_dir: ../../model/lewm-cube-mapped
+  actor_checkpoint: ../../outputs/actor_bc/actor_best.pt
+  action_dataset: ../../data/ogbench_state/cube-single-play-v0.npz
+  output_dir: outputs
+
+seed: 42
+device: cuda
+image_size: 224
+
+planner:
+  num_candidates: 128
+  horizon_blocks: 5
+  action_block: 5
+  execute_steps: 1
+  exploration_std: 0.30
+  temporal_correlation: 0.70
+  elite_count: 8
+  elite_temperature: 0.10
+
+adaptation:
+  enabled: true
+  learning_rate: 0.00001
+  updates_per_plan: 1
+  bc_anchor_coefficient: 0.10
+  min_relative_cost_improvement: 0.20
+  max_target_action_delta: 0.50
+  max_grad_norm: 1.0
+
+evaluation:
+  episodes: 10
+  max_steps: 200
+  fps: 20

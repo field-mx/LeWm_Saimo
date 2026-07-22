@@ -1,0 +1,18 @@
+{
+  "episodes": 1,
+  "successes": 0,
+  "success_rate": 0.0,
+  "world_model_inference_seconds": 0.2664738171733916,
+  "world_model_calls": 2,
+  "mean_world_model_inference_seconds": 0.1332369085866958,
+  "episode_results": [
+    {
+      "episode": 0,
+      "steps": 4,
+      "planning_rounds": 2,
+      "success": false,
+      "terminated": false,
+      "truncated": false
+    }
+  ]
+}

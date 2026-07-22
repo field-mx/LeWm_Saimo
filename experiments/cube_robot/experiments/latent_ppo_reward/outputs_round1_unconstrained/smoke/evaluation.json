@@ -1,0 +1,17 @@
+{
+  "episodes": 1,
+  "successes": 0,
+  "success_rate": 0.0,
+  "world_model_encoder_seconds": 0.02020476502366364,
+  "world_model_encoder_calls": 3,
+  "mean_world_model_encoder_seconds": 0.006734921674554546,
+  "episode_results": [
+    {
+      "episode": 0,
+      "steps": 10,
+      "success": false,
+      "terminated": false,
+      "truncated": false
+    }
+  ]
+}

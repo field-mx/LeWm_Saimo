@@ -1,0 +1,35 @@
+{
+  "paths": {
+    "model_dir": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/model/lewm-cube-mapped",
+    "actor_checkpoint": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/outputs/actor_bc/actor_best.pt",
+    "action_dataset": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/data/ogbench_state/cube-single-play-v0.npz",
+    "output_dir": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/actor_world_model_mpc/outputs/smoke"
+  },
+  "seed": 42,
+  "device": "cuda",
+  "image_size": 224,
+  "planner": {
+    "num_candidates": 4,
+    "horizon_blocks": 2,
+    "action_block": 5,
+    "execute_steps": 2,
+    "exploration_std": 0.3,
+    "temporal_correlation": 0.7,
+    "elite_count": 2,
+    "elite_temperature": 0.1
+  },
+  "adaptation": {
+    "enabled": true,
+    "learning_rate": 1e-05,
+    "updates_per_plan": 1,
+    "bc_anchor_coefficient": 0.1,
+    "min_relative_cost_improvement": 0.2,
+    "max_target_action_delta": 0.5,
+    "max_grad_norm": 1.0
+  },
+  "evaluation": {
+    "episodes": 1,
+    "max_steps": 4,
+    "fps": 20
+  }
+}

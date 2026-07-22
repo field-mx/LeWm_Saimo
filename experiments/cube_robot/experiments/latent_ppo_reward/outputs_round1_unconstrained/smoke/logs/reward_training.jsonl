@@ -1,0 +1,2 @@
+{"stage": "reward_training", "epoch": 1, "train_mse": 0.04450800642371178, "validation_mse": 0.003313597524538636}
+{"stage": "reward_training", "epoch": 2, "train_mse": 0.001485109212808311, "validation_mse": 0.001746286521665752}

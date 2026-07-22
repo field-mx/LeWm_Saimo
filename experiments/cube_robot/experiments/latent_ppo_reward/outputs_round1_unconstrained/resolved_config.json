@@ -1,0 +1,51 @@
+{
+  "paths": {
+    "model_dir": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/model/lewm-cube-mapped",
+    "bc_actor_checkpoint": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/outputs/actor_bc/actor_best.pt",
+    "action_dataset": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/data/ogbench_state/cube-single-play-v0.npz",
+    "output_dir": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_ppo_reward/outputs"
+  },
+  "seed": 42,
+  "device": "cuda",
+  "image_size": 224,
+  "collection": {
+    "episodes": 20,
+    "max_steps": 200,
+    "action_block": 5,
+    "exploration_std": 0.15,
+    "reuse_existing": true,
+    "reward_distance_scale_m": 0.5,
+    "success_bonus": 1.0
+  },
+  "reward_training": {
+    "epochs": 30,
+    "batch_size": 256,
+    "learning_rate": 0.0003,
+    "hidden_dim": 256,
+    "validation_fraction": 0.2
+  },
+  "ppo": {
+    "updates": 100,
+    "num_envs": 64,
+    "rollout_steps": 32,
+    "imagination_horizon": 10,
+    "update_epochs": 4,
+    "minibatch_size": 512,
+    "learning_rate": 0.0001,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "clip_ratio": 0.2,
+    "value_coefficient": 0.5,
+    "entropy_coefficient": 0.002,
+    "max_grad_norm": 1.0,
+    "action_penalty": 0.001,
+    "predicted_success_reward": 1.2,
+    "hidden_dim": 256
+  },
+  "evaluation": {
+    "episodes": 10,
+    "max_steps": 200,
+    "deterministic": true,
+    "fps": 20
+  }
+}

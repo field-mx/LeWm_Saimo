@@ -1,0 +1,80 @@
+{
+  "episodes": 10,
+  "successes": 0,
+  "success_rate": 0.0,
+  "world_model_encoder_seconds": 2.3239894749131054,
+  "world_model_encoder_calls": 410,
+  "mean_world_model_encoder_seconds": 0.005668267011983184,
+  "episode_results": [
+    {
+      "episode": 0,
+      "steps": 200,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "episode": 1,
+      "steps": 200,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "episode": 2,
+      "steps": 200,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "episode": 3,
+      "steps": 200,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "episode": 4,
+      "steps": 200,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "episode": 5,
+      "steps": 200,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "episode": 6,
+      "steps": 200,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "episode": 7,
+      "steps": 200,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "episode": 8,
+      "steps": 200,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "episode": 9,
+      "steps": 200,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    }
+  ]
+}

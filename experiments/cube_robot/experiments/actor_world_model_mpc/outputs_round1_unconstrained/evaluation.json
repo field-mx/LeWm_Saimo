@@ -1,0 +1,90 @@
+{
+  "episodes": 10,
+  "successes": 0,
+  "success_rate": 0.0,
+  "world_model_inference_seconds": 16.990047953790054,
+  "world_model_calls": 400,
+  "mean_world_model_inference_seconds": 0.04247511988447514,
+  "episode_results": [
+    {
+      "episode": 0,
+      "steps": 200,
+      "planning_rounds": 40,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "episode": 1,
+      "steps": 200,
+      "planning_rounds": 40,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "episode": 2,
+      "steps": 200,
+      "planning_rounds": 40,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "episode": 3,
+      "steps": 200,
+      "planning_rounds": 40,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "episode": 4,
+      "steps": 200,
+      "planning_rounds": 40,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "episode": 5,
+      "steps": 200,
+      "planning_rounds": 40,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "episode": 6,
+      "steps": 200,
+      "planning_rounds": 40,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "episode": 7,
+      "steps": 200,
+      "planning_rounds": 40,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "episode": 8,
+      "steps": 200,
+      "planning_rounds": 40,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "episode": 9,
+      "steps": 200,
+      "planning_rounds": 40,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    }
+  ]
+}

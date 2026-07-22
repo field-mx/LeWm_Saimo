@@ -1,0 +1,78 @@
+{
+  "checkpoint": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/outputs/actor_bc/actor_best.pt",
+  "episodes": 10,
+  "successes": 4,
+  "success_rate": 0.4,
+  "episode_results": [
+    {
+      "episode": 0,
+      "steps": 65,
+      "success": true,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "episode": 1,
+      "steps": 200,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "episode": 2,
+      "steps": 200,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "episode": 3,
+      "steps": 65,
+      "success": true,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "episode": 4,
+      "steps": 200,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "episode": 5,
+      "steps": 200,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "episode": 6,
+      "steps": 64,
+      "success": true,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "episode": 7,
+      "steps": 156,
+      "success": true,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "episode": 8,
+      "steps": 200,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "episode": 9,
+      "steps": 200,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    }
+  ]
+}
