@@ -1,0 +1,209 @@
+{
+  "stage": "evaluate",
+  "episodes": 10,
+  "successes": 10,
+  "success_rate": 1.0,
+  "model_accepted_actions": 498,
+  "real_semantic_accept_counts": {
+    "approach": 149,
+    "descend": 82,
+    "grasp": 25,
+    "lift": 79,
+    "transport": 148,
+    "place": 52
+  },
+  "verified_training_actions": 0,
+  "phase_counts": {
+    "approach": 149,
+    "descend": 82,
+    "grasp": 27,
+    "lift": 80,
+    "transport": 153,
+    "place": 52
+  },
+  "world_model_inference_seconds": 17.53441500198096,
+  "world_model_calls": 543,
+  "mean_world_model_inference_seconds": 0.03229174033513989,
+  "episode_results": [
+    {
+      "episode": 0,
+      "steps": 64,
+      "success": true,
+      "terminated": true,
+      "truncated": false,
+      "cube_start_m": [
+        0.3425622880458832,
+        -0.20099227130413055,
+        0.019999999552965164
+      ],
+      "cube_goal_m": [
+        0.5,
+        0.20000000298023224,
+        0.01995990052819252
+      ],
+      "final_phase": "complete"
+    },
+    {
+      "episode": 1,
+      "steps": 53,
+      "success": true,
+      "terminated": true,
+      "truncated": false,
+      "cube_start_m": [
+        0.3483995795249939,
+        -0.000979372300207615,
+        0.019999999552965164
+      ],
+      "cube_goal_m": [
+        0.5,
+        0.0,
+        0.01995990052819252
+      ],
+      "final_phase": "complete"
+    },
+    {
+      "episode": 2,
+      "steps": 67,
+      "success": true,
+      "terminated": true,
+      "truncated": false,
+      "cube_start_m": [
+        0.35355448722839355,
+        -0.19766931235790253,
+        0.019999999552965164
+      ],
+      "cube_goal_m": [
+        0.5,
+        0.20000000298023224,
+        0.01995990052819252
+      ],
+      "final_phase": "complete"
+    },
+    {
+      "episode": 3,
+      "steps": 48,
+      "success": true,
+      "terminated": true,
+      "truncated": false,
+      "cube_start_m": [
+        0.348171591758728,
+        0.20342552661895752,
+        0.019999999552965164
+      ],
+      "cube_goal_m": [
+        0.5,
+        -0.20000000298023224,
+        0.01995990052819252
+      ],
+      "final_phase": "complete"
+    },
+    {
+      "episode": 4,
+      "steps": 54,
+      "success": true,
+      "terminated": true,
+      "truncated": false,
+      "cube_start_m": [
+        0.42522889375686646,
+        0.10497015714645386,
+        0.019999999552965164
+      ],
+      "cube_goal_m": [
+        0.42500001192092896,
+        -0.10000000149011612,
+        0.01995990052819252
+      ],
+      "final_phase": "complete"
+    },
+    {
+      "episode": 5,
+      "steps": 50,
+      "success": true,
+      "terminated": true,
+      "truncated": false,
+      "cube_start_m": [
+        0.35026293992996216,
+        -0.20641520619392395,
+        0.019999999552965164
+      ],
+      "cube_goal_m": [
+        0.5,
+        0.20000000298023224,
+        0.01995990052819252
+      ],
+      "final_phase": "complete"
+    },
+    {
+      "episode": 6,
+      "steps": 43,
+      "success": true,
+      "terminated": true,
+      "truncated": false,
+      "cube_start_m": [
+        0.3554344177246094,
+        -0.005789170973002911,
+        0.019999999552965164
+      ],
+      "cube_goal_m": [
+        0.5,
+        0.0,
+        0.01995990052819252
+      ],
+      "final_phase": "complete"
+    },
+    {
+      "episode": 7,
+      "steps": 65,
+      "success": true,
+      "terminated": true,
+      "truncated": false,
+      "cube_start_m": [
+        0.350185751914978,
+        0.19223327934741974,
+        0.019999999552965164
+      ],
+      "cube_goal_m": [
+        0.5,
+        -0.20000000298023224,
+        0.01995990052819252
+      ],
+      "final_phase": "complete"
+    },
+    {
+      "episode": 8,
+      "steps": 53,
+      "success": true,
+      "terminated": true,
+      "truncated": false,
+      "cube_start_m": [
+        0.3480471670627594,
+        -0.2046806812286377,
+        0.019999999552965164
+      ],
+      "cube_goal_m": [
+        0.5,
+        0.20000000298023224,
+        0.01995990052819252
+      ],
+      "final_phase": "complete"
+    },
+    {
+      "episode": 9,
+      "steps": 46,
+      "success": true,
+      "terminated": true,
+      "truncated": false,
+      "cube_start_m": [
+        0.4234355092048645,
+        0.09983666986227036,
+        0.019999999552965164
+      ],
+      "cube_goal_m": [
+        0.42500001192092896,
+        -0.10000000149011612,
+        0.01995990052819252
+      ],
+      "final_phase": "complete"
+    }
+  ]
+}

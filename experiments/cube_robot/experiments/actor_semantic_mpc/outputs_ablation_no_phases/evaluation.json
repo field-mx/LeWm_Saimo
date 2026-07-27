@@ -1,0 +1,25 @@
+{
+  "stage": "evaluate",
+  "episodes": 1,
+  "successes": 0,
+  "success_rate": 0.0,
+  "model_accepted_actions": 185,
+  "real_semantic_accept_counts": {},
+  "verified_training_actions": 0,
+  "phase_counts": {
+    "direct_goal": 200
+  },
+  "world_model_inference_seconds": 9.036917673889548,
+  "world_model_calls": 200,
+  "mean_world_model_inference_seconds": 0.04518458836944774,
+  "episode_results": [
+    {
+      "episode": 0,
+      "steps": 200,
+      "success": false,
+      "terminated": false,
+      "truncated": true,
+      "final_phase": "direct_goal"
+    }
+  ]
+}

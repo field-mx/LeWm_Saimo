@@ -29,7 +29,7 @@
   },
   "evaluation": {
     "episodes": 10,
-    "max_steps": 200,
+    "max_steps": 500,
     "fps": 20
   }
 }

@@ -1,0 +1,47 @@
+{
+  "stage": "train",
+  "episodes": 1,
+  "successes": 1,
+  "success_rate": 1.0,
+  "model_accepted_actions": 37,
+  "real_semantic_accept_counts": {
+    "approach": 9,
+    "descend": 10,
+    "grasp": 3,
+    "lift": 10,
+    "transport": 15,
+    "place": 6
+  },
+  "verified_training_actions": 37,
+  "phase_counts": {
+    "approach": 9,
+    "descend": 10,
+    "grasp": 3,
+    "lift": 11,
+    "transport": 15,
+    "place": 6
+  },
+  "world_model_inference_seconds": 2.5211647003889084,
+  "world_model_calls": 54,
+  "mean_world_model_inference_seconds": 0.04668823519238719,
+  "episode_results": [
+    {
+      "episode": 0,
+      "steps": 54,
+      "success": true,
+      "terminated": true,
+      "truncated": false,
+      "cube_start_m": [
+        0.40727245807647705,
+        -0.1569615602493286,
+        0.019999999552965164
+      ],
+      "cube_goal_m": [
+        0.3500000238418579,
+        0.20000000298023224,
+        0.01995990052819252
+      ],
+      "final_phase": "complete"
+    }
+  ]
+}
