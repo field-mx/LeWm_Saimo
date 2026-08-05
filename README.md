@@ -199,7 +199,7 @@ LeWM 参数在整个新架构中保持冻结。我们训练的是它外部的任
 
 [播放或下载改造后成功视频](experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/videos/recovery_state_machine_continue_round2/recovery_online_episode_8_success.mp4)
 
-### 成功回合诊断
+### 成功回合分析
 
 ![五阶段恢复状态机第 8 回合 latent 分析](experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/analysis/recovery_state_machine_continue_round2_latent_analysis/episode_08.png)
 
