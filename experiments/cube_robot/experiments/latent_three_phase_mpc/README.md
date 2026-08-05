@@ -53,7 +53,7 @@ LeWM -> 为每条候选链预测 latent 链
 
 ### 网络职责
 
-- `RecoverySemanticNet`：从 RGB latent 预测 `aligned`、`grasped`、`near_goal`、`released`、`retreated`、`complete` 六个视觉谓词。
+- `VisualSemanticNet`：从 RGB latent 预测 `aligned`、`grasped`、`near_goal`、`released`、`retreated`、`complete` 六个视觉谓词。
 - `RecoveryTargetNet`：根据当前 latent、最终目标 latent 和当前状态，给出阶段短期目标 latent。
 - `RecoveryBlockActor`：输出动作链的基准值，MPC 在其周围采样候选链。
 - `RecoveryValueEnsemble`：估计候选 latent 状态的长期价值和模型不确定性。
