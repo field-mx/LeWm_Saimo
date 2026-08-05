@@ -1,0 +1,136 @@
+{
+  "paths": {
+    "model_dir": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/model/lewm-cube-mapped",
+    "coordinate_actor_checkpoint": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/actor_semantic_mpc/outputs/checkpoints/semantic_actor.pt",
+    "action_dataset": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/data/ogbench_state/cube-single-play-v0.npz",
+    "output_dir": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs"
+  },
+  "seed": 42,
+  "device": "cuda",
+  "image_size": 224,
+  "task": {
+    "name": "latent_recovery_cube",
+    "init_xyz": [
+      0.4,
+      -0.15,
+      0.02
+    ],
+    "goal_xyz": [
+      0.35,
+      0.2,
+      0.02
+    ]
+  },
+  "teacher": {
+    "episodes": 48,
+    "max_steps": 160,
+    "seed_offset": 15000,
+    "action_noise_std": 0.02,
+    "reuse_dataset": true,
+    "above_offset_m": 0.16,
+    "xy_alignment_m": 0.04,
+    "xyz_alignment_m": 0.025,
+    "contact_threshold": 0.5,
+    "transport_height_m": 0.14,
+    "goal_xy_m": 0.04,
+    "goal_xyz_m": 0.04,
+    "release_contact_threshold": 0.25,
+    "retreat_distance_m": 0.1,
+    "retreat_height_m": 0.16,
+    "stable_complete_frames": 3
+  },
+  "model": {
+    "latent_dim": 192,
+    "hidden_dim": 384,
+    "action_dim": 5,
+    "action_block": 5,
+    "state_count": 5,
+    "predicate_count": 6,
+    "value_ensemble_size": 2
+  },
+  "training": {
+    "epochs": 80,
+    "batch_size": 128,
+    "learning_rate": 0.0003,
+    "weight_decay": 1e-05,
+    "validation_fraction": 0.2,
+    "gamma": 0.97,
+    "target_tau": 0.01,
+    "semantic_coefficient": 2.0,
+    "target_coefficient": 2.0,
+    "actor_coefficient": 1.0,
+    "critic_coefficient": 1.0,
+    "step_penalty": 0.01,
+    "state_transition_reward": 0.25,
+    "recovery_penalty": 0.05,
+    "success_reward": 1.0,
+    "max_positive_weight": 30.0,
+    "max_grad_norm": 1.0
+  },
+  "planner": {
+    "num_candidates": 96,
+    "horizon_blocks": 5,
+    "exploration_std": 0.08,
+    "exploration_decay": 0.98,
+    "execute_steps_by_state": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "short_target_coefficient": 0.75,
+    "terminal_value_coefficient": 0.9,
+    "trajectory_value_coefficient": 0.2,
+    "uncertainty_coefficient": 0.2,
+    "action_prior_coefficient": 6.0,
+    "action_smoothness_coefficient": 0.01,
+    "action_blend": [
+      0.15,
+      0.15,
+      0.1,
+      0.05,
+      0.0
+    ],
+    "elite_count": 8,
+    "elite_temperature": 0.05
+  },
+  "state_machine": {
+    "predicate_thresholds": [
+      0.65,
+      0.65,
+      0.65,
+      0.65,
+      0.7,
+      0.9
+    ],
+    "transition_consecutive_frames": 2,
+    "complete_consecutive_frames": 2,
+    "transition_cooldown_steps": 2,
+    "max_state_steps": [
+      45,
+      30,
+      55,
+      25,
+      30
+    ],
+    "no_progress_patience": 15
+  },
+  "online_training": {
+    "enabled": true,
+    "episodes": 10,
+    "max_steps": 180,
+    "seed_offset": 11000,
+    "learning_rate": 1e-06,
+    "updates_per_step": 1,
+    "replay_capacity": 4096,
+    "warmup_samples": 8,
+    "batch_size": 64,
+    "minimum_planner_advantage": 0.01,
+    "minimum_value_progress": 0.0,
+    "minimum_semantic_progress": 0.005,
+    "bc_anchor_coefficient": 1.0,
+    "max_grad_norm": 1.0,
+    "fps": 20
+  }
+}

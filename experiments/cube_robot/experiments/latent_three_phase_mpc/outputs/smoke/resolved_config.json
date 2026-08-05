@@ -1,0 +1,117 @@
+{
+  "paths": {
+    "model_dir": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/model/lewm-cube-mapped",
+    "coordinate_actor_checkpoint": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/actor_semantic_mpc/outputs/checkpoints/semantic_actor.pt",
+    "action_dataset": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/data/ogbench_state/cube-single-play-v0.npz",
+    "output_dir": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/smoke"
+  },
+  "seed": 42,
+  "device": "cuda",
+  "image_size": 224,
+  "task": {
+    "name": "latent_three_phase_cube",
+    "init_xyz": [
+      0.4,
+      -0.15,
+      0.02
+    ],
+    "goal_xyz": [
+      0.35,
+      0.2,
+      0.02
+    ]
+  },
+  "teacher": {
+    "episodes": 3,
+    "max_steps": 90,
+    "seed_offset": 9000,
+    "action_noise_std": 0.03,
+    "reuse_dataset": false,
+    "release_distance_m": 0.08,
+    "above_offset_m": 0.16,
+    "xy_alignment_m": 0.04,
+    "xyz_alignment_m": 0.025,
+    "contact_threshold": 0.5,
+    "transport_height_m": 0.14,
+    "goal_xy_m": 0.04,
+    "goal_xyz_m": 0.04
+  },
+  "model": {
+    "latent_dim": 192,
+    "hidden_dim": 384,
+    "action_dim": 5,
+    "action_block": 5,
+    "value_ensemble_size": 2
+  },
+  "training": {
+    "epochs": 2,
+    "batch_size": 32,
+    "learning_rate": 0.0003,
+    "weight_decay": 1e-05,
+    "validation_fraction": 0.2,
+    "gamma": 0.97,
+    "target_tau": 0.01,
+    "phase_coefficient": 1.0,
+    "completion_coefficient": 0.5,
+    "target_coefficient": 2.0,
+    "actor_coefficient": 1.0,
+    "critic_coefficient": 1.0,
+    "completion_positive_weight": 20.0,
+    "step_penalty": 0.01,
+    "phase_transition_reward": 0.35,
+    "success_reward": 1.0,
+    "max_grad_norm": 1.0
+  },
+  "planner": {
+    "num_candidates": 4,
+    "horizon_blocks": 2,
+    "exploration_std": 0.08,
+    "exploration_decay": 0.98,
+    "execute_steps_by_phase": [
+      1,
+      3,
+      1
+    ],
+    "short_target_coefficient": 0.4,
+    "terminal_value_coefficient": 1.0,
+    "trajectory_value_coefficient": 0.2,
+    "uncertainty_coefficient": 0.15,
+    "action_prior_coefficient": 6.0,
+    "action_smoothness_coefficient": 0.01,
+    "action_blend": [
+      0.15,
+      0.15,
+      0.1,
+      0.05,
+      0.0
+    ],
+    "elite_count": 8,
+    "elite_temperature": 0.05
+  },
+  "phase_control": {
+    "transition_consecutive_frames": 2,
+    "complete_probability": 0.98,
+    "complete_consecutive_frames": 1
+  },
+  "online_training": {
+    "enabled": true,
+    "episodes": 1,
+    "max_steps": 6,
+    "seed_offset": 10000,
+    "learning_rate": 1e-05,
+    "updates_per_step": 1,
+    "replay_capacity": 2048,
+    "warmup_samples": 1,
+    "batch_size": 4,
+    "minimum_planner_advantage": 0.01,
+    "minimum_value_progress": 0.0,
+    "bc_anchor_coefficient": 0.25,
+    "max_grad_norm": 1.0
+  },
+  "evaluation": {
+    "episodes": 1,
+    "max_steps": 6,
+    "seed_offset": 11000,
+    "fps": 20
+  }
+}

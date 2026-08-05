@@ -1,0 +1,17 @@
+{
+  "run_name": "recovery_state_machine_continue_round2",
+  "summary": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/recovery_state_machine_continue_round2_summary.json",
+  "log": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/logs/recovery_state_machine_continue_round2/online_training.jsonl",
+  "checkpoint": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/checkpoints/recovery_state_machine_continue_round2_actor_final.pt",
+  "output_dir": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/analysis/recovery_state_machine_continue_round2_latent_analysis",
+  "episodes": 10,
+  "prediction_action_block": 5,
+  "phase_targets": [
+    "align",
+    "grasp",
+    "transfer",
+    "release",
+    "retreat"
+  ],
+  "note": "Frame latents come from decoded MP4 frames. World-model errors compare a t+5 prediction from five logged actions with the encoder latent of decoded video frame t+5."
+}

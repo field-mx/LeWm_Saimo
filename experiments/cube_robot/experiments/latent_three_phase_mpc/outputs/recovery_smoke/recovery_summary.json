@@ -1,0 +1,76 @@
+{
+  "collection": {
+    "reused": false,
+    "samples": 216,
+    "episodes": 4,
+    "successes": 4,
+    "state_counts": {
+      "align": 69,
+      "grasp": 9,
+      "transfer": 106,
+      "release": 4,
+      "retreat": 28
+    },
+    "predicate_counts": {
+      "aligned": 12,
+      "grasped": 110,
+      "near_goal": 32,
+      "released": 28,
+      "retreated": 12,
+      "complete": 12
+    }
+  },
+  "offline_training": {
+    "checkpoint": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/recovery_smoke/checkpoints/recovery_actor_offline.pt"
+  },
+  "online_training": {
+    "mode": "recovery_online_train",
+    "episodes": 2,
+    "successes": 0,
+    "total_recoveries": 3,
+    "world_model_inference_seconds": 0.8566244947724044,
+    "world_model_calls": 60,
+    "mean_world_model_inference_seconds": 0.014277074912873408,
+    "episode_results": [
+      {
+        "episode": 0,
+        "steps": 30,
+        "success": false,
+        "visually_complete": false,
+        "oracle_success_for_metrics_only": false,
+        "terminated": false,
+        "truncated": false,
+        "state_history": [
+          "align",
+          "grasp",
+          "align",
+          "grasp",
+          "align",
+          "grasp",
+          "align"
+        ],
+        "recoveries": 3,
+        "accepted_online_samples": 2,
+        "online_updates": 1,
+        "video": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/recovery_smoke/videos/recovery_state_machine/recovery_online_episode_0_failed.mp4"
+      },
+      {
+        "episode": 1,
+        "steps": 30,
+        "success": false,
+        "visually_complete": false,
+        "oracle_success_for_metrics_only": false,
+        "terminated": false,
+        "truncated": false,
+        "state_history": [
+          "align"
+        ],
+        "recoveries": 0,
+        "accepted_online_samples": 3,
+        "online_updates": 3,
+        "video": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/recovery_smoke/videos/recovery_state_machine/recovery_online_episode_1_failed.mp4"
+      }
+    ],
+    "checkpoint": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/recovery_smoke/checkpoints/recovery_actor_online_final.pt"
+  }
+}
