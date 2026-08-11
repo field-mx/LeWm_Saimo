@@ -51,6 +51,11 @@ CEM 采样动作链 ----------+
 
 我们进一步计算了所有专家轨迹中，每帧 RGB latent 与最终目标帧 latent 的 MSE：
 
+
+https://github.com/user-attachments/assets/293038c7-3cb3-4358-b562-5558c5d71000
+
+
+
 ![专家轨迹逐帧 latent 与最终目标 latent 的 MSE](expert_latent_goal_mse.png)
 
 横轴是专家轨迹步长，纵轴是当前帧 latent 与最终目标 latent 的 MSE。各条专家轨迹及其
