@@ -190,7 +190,9 @@ LeWM 参数在整个新架构中保持冻结。我们训练的是它外部的任
   <source src="experiments/cube_robot/outputs/fixed_task/agent_short_panel.mp4" type="video/mp4">
 </video>
 
-[播放或下载改造前基线视频](experiments/cube_robot/outputs/fixed_task/agent_short_panel.mp4)
+https://github.com/user-attachments/assets/1bb72b45-9cc0-4673-93d4-f256d40af9a2
+
+
 
 ### 改造后：五阶段 RGB-Latent MPC
 
@@ -202,7 +204,24 @@ LeWM 参数在整个新架构中保持冻结。我们训练的是它外部的任
   <source src="experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/videos/recovery_state_machine_continue_round2/recovery_online_episode_8_success.mp4" type="video/mp4">
 </video>
 
-[播放或下载改造后成功视频](experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/videos/recovery_state_machine_continue_round2/recovery_online_episode_8_success.mp4)
+
+
+
+https://github.com/user-attachments/assets/3fc7ffb3-dc20-4477-80cc-885f67a44318
+
+
+
+https://github.com/user-attachments/assets/14922d98-4d45-4307-84c5-b6667e77ef05
+
+
+
+https://github.com/user-attachments/assets/667a3f62-4e4a-4d93-a73d-c3223a08e22d
+
+
+
+
+
+
 
 ### 成功回合分析
 
