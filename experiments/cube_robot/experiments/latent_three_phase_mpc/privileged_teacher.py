@@ -1,3 +1,5 @@
+#教师模型，生成最终rgb
+
 from __future__ import annotations
 
 from dataclasses import dataclass

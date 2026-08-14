@@ -740,39 +740,20 @@ class LearnedRecoveryStateMachine:
             grasp_ready = (
                 grasped >= float(self.settings["grasp_enter_threshold"])
                 and closed >= float(self.settings["gripper_closed_threshold"])
-                and learned_ok
-                and proposal_state == TRANSFER
             )
             self.grasp_streak = self.grasp_streak + 1 if grasp_ready else 0
-            alignment_lost = aligned < float(
-                self.settings["aligned_exit_threshold"]
-            )
-            self.lost_alignment_streak = (
-                self.lost_alignment_streak + 1 if alignment_lost else 0
-            )
-            if (
-                self.cooldown == 0
-                and self.grasp_streak
-                >= int(self.settings["grasp_confirm_frames"])
+            if self.grasp_streak >= int(
+                self.settings["grasp_confirm_frames"]
             ):
                 return self._change(TRANSFER, "grasp_confirmed")
-            if (
-                self.cooldown == 0
-                and self.lost_alignment_streak
-                >= int(self.settings["lost_alignment_frames"])
-            ):
-                return self._change(ALIGN, "alignment_lost")
             if self.steps_in_state >= int(self.settings["max_grasp_steps"]):
                 return self._change(ALIGN, "grasp_timeout")
 
         else:
-            grasp_lost = (
-                grasped < float(self.settings["grasp_exit_threshold"])
-                or closed < float(self.settings["gripper_closed_threshold"])
-            )
-            self.lost_grasp_streak = (
-                self.lost_grasp_streak + 1 if grasp_lost else 0
-            )
+            # TRANSFER is latched after a confirmed grasp. Visual grasp scores
+            # can fluctuate while the arm moves; rolling back would switch the
+            # planner to ALIGN and actively reopen the gripper.
+            self.lost_grasp_streak = 0
             self.complete_streak = (
                 self.complete_streak + 1 if transfer_goal_reached else 0
             )
@@ -788,19 +769,6 @@ class LearnedRecoveryStateMachine:
                     "transfer_goal_confirmed",
                     True,
                 )
-            if (
-                self.cooldown == 0
-                and self.lost_grasp_streak
-                >= int(self.settings["lost_grasp_frames"])
-            ):
-                destination = (
-                    GRASP
-                    if aligned
-                    >= float(self.settings["aligned_enter_threshold"])
-                    else ALIGN
-                )
-                return self._change(destination, "grasp_lost")
-
         return StateTransition(
             previous, self.state, False, False, "stay", self.complete
         )
