@@ -1,0 +1,165 @@
+from __future__ import annotations
+
+import argparse
+import sys
+from pathlib import Path
+
+import numpy as np
+import ogbench
+
+
+HERE = Path(__file__).resolve().parent
+if str(HERE) not in sys.path:
+    sys.path.insert(0, str(HERE))
+
+import run_experiment as base
+import run_recovery_experiment as legacy
+from privileged_teacher import PrivilegedTeacher
+
+
+def robot_proprio(state: np.ndarray) -> np.ndarray:
+    value = np.asarray(state, dtype=np.float32)
+    closure = np.clip(value[..., 17:18] / 3.0, 0.0, 1.0)
+    return np.concatenate(
+        [value[..., 12:15], value[..., 15:17], closure], axis=-1
+    ).astype(np.float32, copy=False)
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Replay and augment the old complete recovery dataset."
+    )
+    parser.add_argument(
+        "--config", type=Path, default=HERE / "recovery_config.yaml"
+    )
+    parser.add_argument(
+        "--source",
+        type=Path,
+        default=HERE / "outputs/data/recovery_temporal_proprio_latents.npz",
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=HERE / "outputs/data/recovery_complete_proprio6_latents.npz",
+    )
+    parser.add_argument("--tolerance", type=float, default=1e-5)
+    return parser.parse_args()
+
+
+def main() -> None:
+    args = parse_args()
+    config = base.load_config(args.config.resolve())
+    settings = config["teacher"]
+    with np.load(args.source.resolve()) as source:
+        original = {name: np.asarray(source[name]) for name in source.files}
+
+    episode_ids = np.asarray(original["episode_ids"], dtype=np.int64)
+    saved_xyz = np.asarray(original["proprios"], dtype=np.float32)
+    env = ogbench.make_env_and_datasets(
+        "cube-single-play-v0",
+        env_only=True,
+        terminate_at_goal=False,
+    )
+    teacher = PrivilegedTeacher()
+    rng = np.random.default_rng(int(config["seed"]) + 73)
+    current_proprios = []
+    previous_proprios = []
+    next_proprios = []
+    episode_max_errors = []
+
+    try:
+        for episode in np.unique(episode_ids):
+            state, reset_info = env.reset(
+                seed=(
+                    int(config["seed"])
+                    + int(settings["seed_offset"])
+                    + int(episode)
+                ),
+                options=base.task_reset_options(config),
+            )
+            goal_state = np.asarray(reset_info["goal"], dtype=np.float32)
+            states = [np.asarray(state, dtype=np.float32).copy()]
+            stable_complete = 0
+
+            for _ in range(int(settings["max_steps"])):
+                ideal_action, fine_state, labels = (
+                    legacy.recovery_teacher_action(
+                        teacher, state, goal_state, settings
+                    )
+                )
+                stable_complete = (
+                    stable_complete + 1
+                    if labels[legacy.COMPLETE]
+                    else 0
+                )
+                if stable_complete >= int(
+                    settings["stable_complete_frames"]
+                ):
+                    break
+
+                noise = rng.normal(
+                    0.0,
+                    float(settings["action_noise_std"]),
+                    size=ideal_action.shape,
+                )
+                if fine_state in ("release", "retreat", "complete"):
+                    noise[4] = 0.0
+                executed_action = np.clip(
+                    ideal_action + noise, -1.0, 1.0
+                ).astype(np.float32)
+                state, _, terminated, truncated, _ = env.step(
+                    executed_action
+                )
+                states.append(np.asarray(state, dtype=np.float32).copy())
+                if terminated or truncated:
+                    break
+
+            rows = np.flatnonzero(episode_ids == episode)
+            if len(states) != len(rows):
+                raise RuntimeError(
+                    f"Episode {episode}: replay produced {len(states)} "
+                    f"frames, saved dataset contains {len(rows)}."
+                )
+            proprio6 = robot_proprio(np.asarray(states))
+            error = float(
+                np.max(np.abs(proprio6[:, :3] - saved_xyz[rows]))
+            )
+            episode_max_errors.append(error)
+            if error > float(args.tolerance):
+                raise RuntimeError(
+                    f"Episode {episode}: XYZ replay error {error:.8g} "
+                    f"exceeds tolerance {args.tolerance:.8g}."
+                )
+            current_proprios.append(proprio6)
+            previous_proprios.append(
+                np.concatenate([proprio6[:1], proprio6[:-1]], axis=0)
+            )
+            next_proprios.append(
+                np.concatenate([proprio6[1:], proprio6[-1:]], axis=0)
+            )
+    finally:
+        env.close()
+
+    augmented = dict(original)
+    augmented["previous_proprios"] = np.concatenate(
+        previous_proprios, axis=0
+    )
+    augmented["proprios"] = np.concatenate(current_proprios, axis=0)
+    augmented["next_proprios"] = np.concatenate(next_proprios, axis=0)
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    np.savez_compressed(args.output, **augmented)
+    print(
+        {
+            "source": str(args.source.resolve()),
+            "output": str(args.output.resolve()),
+            "episodes": int(len(np.unique(episode_ids))),
+            "frames": int(len(episode_ids)),
+            "proprio_dim": int(augmented["proprios"].shape[1]),
+            "max_xyz_replay_error": float(max(episode_max_errors)),
+        }
+    )
+
+
+if __name__ == "__main__":
+    main()
+
