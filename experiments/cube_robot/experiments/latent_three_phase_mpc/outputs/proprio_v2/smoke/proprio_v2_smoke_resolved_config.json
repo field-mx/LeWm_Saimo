@@ -1,0 +1,143 @@
+{
+  "paths": {
+    "model_dir": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/model/lewm-cube-mapped",
+    "action_dataset": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/data/ogbench_state/cube-single-play-v0.npz",
+    "source_latent_cache": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/data/cube_semantic_latents.npz",
+    "output_dir": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/proprio_v2/smoke"
+  },
+  "seed": 42,
+  "device": "cuda",
+  "image_size": 224,
+  "task": {
+    "name": "proprio_v2_cube",
+    "init_xyz": [
+      0.4,
+      -0.15,
+      0.02
+    ],
+    "goal_xyz": [
+      0.35,
+      0.2,
+      0.02
+    ]
+  },
+  "labels": {
+    "xy_alignment_m": 0.04,
+    "xyz_alignment_m": 0.035,
+    "contact_threshold": 0.5,
+    "closed_gripper_threshold": 0.45
+  },
+  "model": {
+    "latent_dim": 192,
+    "hidden_dim": 384,
+    "action_dim": 5,
+    "action_block": 5,
+    "state_count": 3,
+    "predicate_count": 2,
+    "proprio_dim": 6,
+    "value_ensemble_size": 2,
+    "xyz_action_scale": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "proprio_min": [
+      -3.0,
+      -5.0,
+      0.0,
+      -1.0,
+      -1.0,
+      0.0
+    ],
+    "proprio_max": [
+      3.0,
+      5.0,
+      5.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "offline_training": {
+    "epochs": 1,
+    "batch_size": 128,
+    "learning_rate": 0.0002,
+    "weight_decay": 1e-05,
+    "validation_fraction": 0.1,
+    "gamma": 0.97,
+    "target_tau": 0.01,
+    "semantic_coefficient": 2.0,
+    "transition_coefficient": 1.0,
+    "target_coefficient": 1.5,
+    "actor_coefficient": 2.0,
+    "critic_coefficient": 0.5,
+    "step_penalty": 0.01,
+    "state_transition_reward": 0.25,
+    "recovery_penalty": 0.05,
+    "max_positive_weight": 20.0,
+    "max_grad_norm": 1.0
+  },
+  "planner": {
+    "num_candidates": 8,
+    "horizon_blocks": 2,
+    "exploration_std": 0.08,
+    "exploration_decay": 0.98,
+    "execute_steps_by_state": [
+      1,
+      1,
+      1
+    ],
+    "short_target_coefficient": 0.85,
+    "terminal_value_coefficient": 0.7,
+    "trajectory_value_coefficient": 0.15,
+    "uncertainty_coefficient": 0.2,
+    "action_prior_coefficient": 5.0,
+    "action_smoothness_coefficient": 0.02,
+    "action_blend": [
+      0.15,
+      0.15,
+      0.1,
+      0.05,
+      0.0
+    ],
+    "elite_count": 8,
+    "elite_temperature": 0.05
+  },
+  "state_machine": {
+    "aligned_enter_threshold": 0.65,
+    "aligned_exit_threshold": 0.35,
+    "grasp_enter_threshold": 0.65,
+    "grasp_exit_threshold": 0.35,
+    "gripper_closed_threshold": 0.55,
+    "transition_model_confidence": 0.4,
+    "aligned_confirm_frames": 2,
+    "grasp_confirm_frames": 3,
+    "lost_alignment_frames": 3,
+    "lost_grasp_frames": 4,
+    "state_cooldown_steps": 2,
+    "max_align_steps": 90,
+    "max_grasp_steps": 55
+  },
+  "transfer_goal": {
+    "reference_seed": 15000,
+    "max_steps": 180,
+    "goal_xyz_m": 0.04,
+    "latent_mse_threshold": 0.017,
+    "complete_consecutive_frames": 2
+  },
+  "online_training": {
+    "episodes": 1,
+    "max_steps": 8,
+    "seed_offset": 11000,
+    "learning_rate": 1e-06,
+    "updates_per_step": 1,
+    "replay_capacity": 4096,
+    "warmup_samples": 2,
+    "batch_size": 4,
+    "minimum_planner_advantage": 0.005,
+    "minimum_semantic_progress": 0.002,
+    "bc_anchor_coefficient": 1.0,
+    "max_grad_norm": 1.0,
+    "fps": 20
+  }
+}

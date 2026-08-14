@@ -1,0 +1,66 @@
+{
+  "online_training": {
+    "mode": "recovery_online_train",
+    "episodes": 2,
+    "successes": 0,
+    "total_recoveries": 0,
+    "transfer_goal_rgb": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/recovery_smoke/videos/archive_restore_smoke/transfer_goal_rgb.png",
+    "transfer_goal": {
+      "generation_steps": 50,
+      "cube_goal_distance_m": 0.029725151136517525,
+      "gripper_contact": 0.9881444573402405,
+      "init_xyz": [
+        0.4,
+        -0.15,
+        0.02
+      ],
+      "goal_xyz": [
+        0.35,
+        0.2,
+        0.02
+      ]
+    },
+    "transfer_goal_mse_threshold": 0.017,
+    "world_model_inference_seconds": 1.0464002029038966,
+    "world_model_calls": 60,
+    "mean_world_model_inference_seconds": 0.01744000338173161,
+    "episode_results": [
+      {
+        "episode": 0,
+        "steps": 30,
+        "success": false,
+        "visually_complete": false,
+        "oracle_success_for_metrics_only": false,
+        "terminated": false,
+        "truncated": false,
+        "state_history": [
+          "align",
+          "grasp"
+        ],
+        "recoveries": 0,
+        "accepted_online_samples": 12,
+        "online_updates": 11,
+        "video": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/recovery_smoke/videos/archive_restore_smoke/recovery_online_episode_0_failed.mp4"
+      },
+      {
+        "episode": 1,
+        "steps": 30,
+        "success": false,
+        "visually_complete": false,
+        "oracle_success_for_metrics_only": false,
+        "terminated": false,
+        "truncated": false,
+        "state_history": [
+          "align",
+          "grasp"
+        ],
+        "recoveries": 0,
+        "accepted_online_samples": 5,
+        "online_updates": 5,
+        "video": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/recovery_smoke/videos/archive_restore_smoke/recovery_online_episode_1_failed.mp4"
+      }
+    ],
+    "checkpoint": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/recovery_smoke/checkpoints/archive_restore_smoke_actor_final.pt",
+    "source_checkpoint": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/checkpoints/recovery_cube_semantic_actor.pt"
+  }
+}
