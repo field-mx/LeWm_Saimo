@@ -1,0 +1,41 @@
+{
+  "architecture": {
+    "runtime_inputs": [
+      "current RGB latent",
+      "previous RGB latent",
+      "task goal RGB latent",
+      "end-effector XYZ",
+      "end-effector yaw cos/sin",
+      "gripper closure"
+    ],
+    "offline_label_only": [
+      "cube XYZ",
+      "goal XYZ",
+      "simulator contact"
+    ],
+    "control_modes": [
+      "align",
+      "grasp",
+      "transfer"
+    ],
+    "transfer_target": "task-specific MuJoCo goal RGB latent; TargetNet is bypassed after grasp confirmation"
+  },
+  "offline_training": {
+    "sampling": "none",
+    "collection": {
+      "reused": false,
+      "samples": 3007,
+      "episodes": 64,
+      "successful_episodes": 64,
+      "collection_attempts": 67
+    },
+    "training": {
+      "epochs": 80,
+      "train_samples": 2375,
+      "validation_samples": 632,
+      "best_validation_loss": 0.5805483043193818,
+      "training_seconds": 37.2561669787392
+    },
+    "checkpoint": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/proprio_v2/checkpoints/proprio_v2_offline.pt"
+  }
+}

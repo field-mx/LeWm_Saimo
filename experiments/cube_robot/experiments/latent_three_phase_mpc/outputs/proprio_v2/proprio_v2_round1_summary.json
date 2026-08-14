@@ -1,0 +1,203 @@
+{
+  "architecture": {
+    "runtime_inputs": [
+      "current RGB latent",
+      "previous RGB latent",
+      "task goal RGB latent",
+      "end-effector XYZ",
+      "end-effector yaw cos/sin",
+      "gripper closure"
+    ],
+    "offline_label_only": [
+      "cube XYZ",
+      "goal XYZ",
+      "simulator contact"
+    ],
+    "control_modes": [
+      "align",
+      "grasp",
+      "transfer"
+    ],
+    "transfer_target": "task-specific MuJoCo goal RGB latent; TargetNet is bypassed after grasp confirmation"
+  },
+  "online_training": {
+    "mode": "proprio_v2_online",
+    "episodes": 10,
+    "successes": 2,
+    "grasp_confirmed_episodes": 10,
+    "transfer_goal_rgb": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/proprio_v2/videos/proprio_v2_round1/transfer_goal_rgb.png",
+    "transfer_goal_metadata": {
+      "generation_steps": 50,
+      "cube_goal_distance_m": 0.029725151136517525,
+      "task_init_xyz": [
+        0.4,
+        -0.15,
+        0.02
+      ],
+      "task_goal_xyz": [
+        0.35,
+        0.2,
+        0.02
+      ]
+    },
+    "world_model_inference_seconds": 53.798113523516804,
+    "world_model_calls": 1697,
+    "mean_world_model_inference_seconds": 0.0317018936496858,
+    "episode_results": [
+      {
+        "episode": 0,
+        "steps": 200,
+        "success": false,
+        "oracle_success_for_metrics_only": false,
+        "state_history": [
+          "align",
+          "grasp",
+          "transfer"
+        ],
+        "recoveries": 0,
+        "accepted_online_samples": 62,
+        "actor_updates": 55,
+        "video": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/proprio_v2/videos/proprio_v2_round1/proprio_v2_episode_0_failed.mp4"
+      },
+      {
+        "episode": 1,
+        "steps": 54,
+        "success": true,
+        "oracle_success_for_metrics_only": true,
+        "state_history": [
+          "align",
+          "grasp",
+          "transfer"
+        ],
+        "recoveries": 0,
+        "accepted_online_samples": 17,
+        "actor_updates": 17,
+        "video": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/proprio_v2/videos/proprio_v2_round1/proprio_v2_episode_1_success.mp4"
+      },
+      {
+        "episode": 2,
+        "steps": 200,
+        "success": false,
+        "oracle_success_for_metrics_only": false,
+        "state_history": [
+          "align",
+          "grasp",
+          "transfer"
+        ],
+        "recoveries": 0,
+        "accepted_online_samples": 40,
+        "actor_updates": 40,
+        "video": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/proprio_v2/videos/proprio_v2_round1/proprio_v2_episode_2_failed.mp4"
+      },
+      {
+        "episode": 3,
+        "steps": 200,
+        "success": false,
+        "oracle_success_for_metrics_only": false,
+        "state_history": [
+          "align",
+          "grasp",
+          "transfer"
+        ],
+        "recoveries": 0,
+        "accepted_online_samples": 47,
+        "actor_updates": 47,
+        "video": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/proprio_v2/videos/proprio_v2_round1/proprio_v2_episode_3_failed.mp4"
+      },
+      {
+        "episode": 4,
+        "steps": 200,
+        "success": false,
+        "oracle_success_for_metrics_only": false,
+        "state_history": [
+          "align",
+          "grasp",
+          "transfer"
+        ],
+        "recoveries": 0,
+        "accepted_online_samples": 7,
+        "actor_updates": 7,
+        "video": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/proprio_v2/videos/proprio_v2_round1/proprio_v2_episode_4_failed.mp4"
+      },
+      {
+        "episode": 5,
+        "steps": 200,
+        "success": false,
+        "oracle_success_for_metrics_only": false,
+        "state_history": [
+          "align",
+          "grasp",
+          "align",
+          "grasp",
+          "transfer"
+        ],
+        "recoveries": 1,
+        "accepted_online_samples": 71,
+        "actor_updates": 71,
+        "video": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/proprio_v2/videos/proprio_v2_round1/proprio_v2_episode_5_failed.mp4"
+      },
+      {
+        "episode": 6,
+        "steps": 43,
+        "success": true,
+        "oracle_success_for_metrics_only": true,
+        "state_history": [
+          "align",
+          "grasp",
+          "transfer"
+        ],
+        "recoveries": 0,
+        "accepted_online_samples": 18,
+        "actor_updates": 18,
+        "video": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/proprio_v2/videos/proprio_v2_round1/proprio_v2_episode_6_success.mp4"
+      },
+      {
+        "episode": 7,
+        "steps": 200,
+        "success": false,
+        "oracle_success_for_metrics_only": false,
+        "state_history": [
+          "align",
+          "grasp",
+          "transfer"
+        ],
+        "recoveries": 0,
+        "accepted_online_samples": 13,
+        "actor_updates": 13,
+        "video": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/proprio_v2/videos/proprio_v2_round1/proprio_v2_episode_7_failed.mp4"
+      },
+      {
+        "episode": 8,
+        "steps": 200,
+        "success": false,
+        "oracle_success_for_metrics_only": true,
+        "state_history": [
+          "align",
+          "grasp",
+          "transfer"
+        ],
+        "recoveries": 0,
+        "accepted_online_samples": 41,
+        "actor_updates": 41,
+        "video": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/proprio_v2/videos/proprio_v2_round1/proprio_v2_episode_8_failed.mp4"
+      },
+      {
+        "episode": 9,
+        "steps": 200,
+        "success": false,
+        "oracle_success_for_metrics_only": false,
+        "state_history": [
+          "align",
+          "grasp",
+          "transfer"
+        ],
+        "recoveries": 0,
+        "accepted_online_samples": 12,
+        "actor_updates": 12,
+        "video": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/proprio_v2/videos/proprio_v2_round1/proprio_v2_episode_9_failed.mp4"
+      }
+    ],
+    "source_checkpoint": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/proprio_v2/checkpoints/proprio_v2_offline.pt",
+    "checkpoint": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/proprio_v2/checkpoints/proprio_v2_round1_actor_final.pt"
+  }
+}
