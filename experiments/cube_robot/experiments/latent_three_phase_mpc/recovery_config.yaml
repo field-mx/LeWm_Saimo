@@ -2,6 +2,10 @@ paths:
   model_dir: ../../model/lewm-cube-mapped
   coordinate_actor_checkpoint: ../actor_semantic_mpc/outputs/checkpoints/semantic_actor.pt
   action_dataset: ../../data/ogbench_state/cube-single-play-v0.npz
+  cube_semantic_dataset: ../../data/ogbench_state/cube-single-play-v0.npz
+  cube_semantic_cache: outputs/data/cube_semantic_latents.npz
+  cube_semantic_source_checkpoint: outputs/checkpoints/recovery_temporal_proprio_strict_round3_actor_final.pt
+  cube_semantic_checkpoint: outputs/checkpoints/recovery_cube_semantic_actor.pt
   output_dir: outputs
 
 seed: 42
@@ -24,6 +28,7 @@ teacher:
   xyz_alignment_m: 0.025
   contact_threshold: 0.50
   transport_height_m: 0.14
+  lift_target_height_m: 0.36
   goal_xy_m: 0.04
   goal_xyz_m: 0.04
   release_contact_threshold: 0.25
@@ -39,6 +44,10 @@ model:
   state_count: 5
   predicate_count: 6
   value_ensemble_size: 2
+  proprio_dim: 3 # normalized end-effector XYZ from the current robot state
+  proprio_action_scale: [0.5, 0.5, 0.5]
+  proprio_min: [-3.0, -5.0, 0.0]
+  proprio_max: [3.0, 5.0, 5.0]
 
 training:
   epochs: 80
@@ -56,6 +65,21 @@ training:
   state_transition_reward: 0.25
   recovery_penalty: 0.05
   success_reward: 1.0
+  max_positive_weight: 30.0
+  max_grad_norm: 1.0
+
+# Pretrain the existing VisualSemanticNet on broad Cube demonstrations. The
+# network architecture is unchanged; only its training data is expanded.
+cube_semantic_training:
+  samples_per_episode: 64 # 64,000 samples across all 1,000 Cube episodes
+  min_goal_offset: 25
+  max_goal_offset: 100
+  render_encode_batch_size: 128
+  epochs: 30
+  batch_size: 512
+  learning_rate: 0.0001
+  weight_decay: 0.00001
+  validation_fraction: 0.10
   max_positive_weight: 30.0
   max_grad_norm: 1.0
 
@@ -80,13 +104,22 @@ state_machine:
   transition_consecutive_frames: 2
   complete_consecutive_frames: 2
   transition_cooldown_steps: 2
-  max_state_steps: [45, 30, 55, 25, 30]
+  max_state_steps: [60, 60, 60, 60, 60]
   no_progress_patience: 15
+
+# RGB reference rendered by the privileged simulator only once before evaluation.
+# It captures the first frame where the gripper is still holding the cube and
+# the cube is inside the task goal. Inference compares real RGB latents against
+# this reference and never observes cube coordinates.
+transfer_goal:
+  reference_seed: 15000
+  max_steps: 160
+  latent_mse_threshold: 0.017
 
 online_training:
   enabled: true
   episodes: 10
-  max_steps: 180
+  max_steps: 300
   seed_offset: 11000
   learning_rate: 0.000001
   updates_per_step: 1

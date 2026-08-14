@@ -53,11 +53,23 @@ ALIGNED, GRASPED, NEAR_GOAL, RELEASED, RETREATED, COMPLETE = range(
     len(PREDICATE_NAMES)
 )
 ACTION_RANGE = np.asarray([0.05, 0.05, 0.05, 0.30, 1.0], dtype=np.float32)
+EFFECTOR_PROPRIO_SLICE = slice(12, 15)
+
+
+def arm_proprio(state: np.ndarray) -> np.ndarray:
+    """Return normalized end-effector XYZ without object or goal coordinates."""
+    values = np.asarray(state, dtype=np.float32)
+    if values.shape[-1] < EFFECTOR_PROPRIO_SLICE.stop:
+        raise ValueError("Robot state must contain end-effector XYZ at [12:15].")
+    return values[..., EFFECTOR_PROPRIO_SLICE].copy()
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="RGB-only latent MPC with a recoverable semantic state machine."
+        description=(
+            "RGB latent MPC with end-effector proprioception and a recoverable "
+            "semantic state machine."
+        )
     )
     parser.add_argument(
         "--config", type=Path, default=HERE / "recovery_config.yaml"
@@ -229,19 +241,23 @@ def collect_recovery_dataset(
 ) -> dict[str, Any]:
     if dataset_path.exists() and bool(config["teacher"]["reuse_dataset"]):
         with np.load(dataset_path) as dataset:
-            return {
-                "reused": True,
-                "samples": int(len(dataset["latents"])),
-                "episodes": int(len(np.unique(dataset["episode_ids"]))),
-                "successes": int(
-                    sum(
-                        np.max(dataset["episode_successes"][
-                            dataset["episode_ids"] == episode
-                        ])
-                        for episode in np.unique(dataset["episode_ids"])
-                    )
-                ),
-            }
+            if all(
+                name in dataset.files
+                for name in ("previous_proprios", "proprios")
+            ):
+                return {
+                    "reused": True,
+                    "samples": int(len(dataset["latents"])),
+                    "episodes": int(len(np.unique(dataset["episode_ids"]))),
+                    "successes": int(
+                        sum(
+                            np.max(dataset["episode_successes"][
+                                dataset["episode_ids"] == episode
+                            ])
+                            for episode in np.unique(dataset["episode_ids"])
+                        )
+                    ),
+                }
 
     settings = config["teacher"]
     training = config["training"]
@@ -261,6 +277,8 @@ def collect_recovery_dataset(
         "goal_latents",
         "keyframe_target_latents",
         "next_keyframe_target_latents",
+        "previous_proprios",
+        "proprios",
         "action_blocks",
         "state_ids",
         "next_state_ids",
@@ -283,6 +301,7 @@ def collect_recovery_dataset(
         goal_state = np.asarray(reset_info["goal"], dtype=np.float32)
         goal_image = np.asarray(reset_info["goal_rendered"]).copy()
         frames = [np.asarray(env.render()).copy()]
+        states = [np.asarray(state, dtype=np.float32).copy()]
         ideal_actions: list[np.ndarray] = []
         labels_per_frame: list[np.ndarray] = []
         fine_states: list[str] = []
@@ -313,6 +332,7 @@ def collect_recovery_dataset(
             ideal_actions.append(ideal_action.astype(np.float32))
             state, _, terminated, truncated, _ = env.step(executed_action)
             frames.append(np.asarray(env.render()).copy())
+            states.append(np.asarray(state, dtype=np.float32).copy())
             if terminated or truncated:
                 break
 
@@ -362,6 +382,10 @@ def collect_recovery_dataset(
             arrays["next_keyframe_target_latents"].append(
                 latents[next_endpoint]
             )
+            arrays["previous_proprios"].append(
+                arm_proprio(states[max(0, index - 1)])
+            )
+            arrays["proprios"].append(arm_proprio(states[index]))
             arrays["action_blocks"].append(
                 base.action_block(ideal_actions, index, block).reshape(-1)
             )
@@ -435,6 +459,8 @@ DATASET_KEYS = (
     "goal_latents",
     "keyframe_target_latents",
     "next_keyframe_target_latents",
+    "previous_proprios",
+    "proprios",
     "action_blocks",
     "state_ids",
     "next_state_ids",
@@ -467,6 +493,7 @@ def build_models(config: dict[str, Any], device: torch.device):
         latent_dim,
         hidden_dim,
         int(settings["predicate_count"]),
+        int(settings.get("proprio_dim", 0)),
     ).to(device)
     target_net = RecoveryTargetNet(
         latent_dim, hidden_dim, state_count
@@ -477,6 +504,7 @@ def build_models(config: dict[str, Any], device: torch.device):
         int(settings["action_block"]),
         hidden_dim,
         state_count,
+        int(settings.get("proprio_dim", 0)),
     ).to(device)
     critic = RecoveryValueEnsemble(
         latent_dim,
@@ -506,6 +534,8 @@ def model_losses(
         goal,
         keyframe_target,
         next_keyframe_target,
+        previous_proprio,
+        proprio,
         action_blocks,
         state_id,
         next_state_id,
@@ -514,10 +544,16 @@ def model_losses(
         done,
     ) = [item.to(device) for item in batch]
 
-    predicate_logits = semantic_net(previous, current, goal)
+    predicate_logits = semantic_net(
+        previous,
+        current,
+        goal,
+        previous_proprio,
+        proprio,
+    )
     predicted_target = target_net(previous, current, goal, state_id)
     predicted_actions = actor.mean(
-        previous, current, keyframe_target, goal, state_id
+        previous, current, keyframe_target, goal, state_id, proprio
     )
     values = critic(previous, current, keyframe_target, goal, state_id)
     with torch.no_grad():
@@ -783,8 +819,18 @@ def semantic_probabilities(
     previous: torch.Tensor,
     current: torch.Tensor,
     goal: torch.Tensor,
+    previous_proprio: torch.Tensor,
+    current_proprio: torch.Tensor,
 ) -> torch.Tensor:
-    return torch.sigmoid(semantic_net(previous, current, goal))[0]
+    return torch.sigmoid(
+        semantic_net(
+            previous,
+            current,
+            goal,
+            previous_proprio,
+            current_proprio,
+        )
+    )[0]
 
 
 @torch.inference_mode()
@@ -844,31 +890,65 @@ class RecoveryStateMachine:
         self.visually_complete = False
 
     def initialize(self, probabilities: np.ndarray) -> int:
-        self.state = desired_state_from_probabilities(
-            probabilities, self.thresholds
-        )
+        # Every task starts at ALIGN. Later transitions must pass each guard.
+        self.state = ALIGN
         self.pending_state = self.state
         return self.state
+
+    def _constrained_desired_state(
+        self, probabilities: np.ndarray
+    ) -> int:
+        active = probabilities >= self.thresholds
+        if self.state == ALIGN:
+            return GRASP if active[ALIGNED] else ALIGN
+        if self.state == GRASP:
+            if active[GRASPED]:
+                return TRANSFER
+            return GRASP if active[ALIGNED] else ALIGN
+        if self.state == TRANSFER:
+            if active[GRASPED]:
+                return TRANSFER
+            return GRASP
+        if self.state == RELEASE:
+            if active[RELEASED] or (
+                active[NEAR_GOAL] and not active[GRASPED]
+            ):
+                return RETREAT
+            return RELEASE if active[GRASPED] else TRANSFER
+        if active[RELEASED] or (
+            active[NEAR_GOAL] and not active[GRASPED]
+        ):
+            return RETREAT
+        return RELEASE
 
     def _forced_recovery_state(self, probabilities: np.ndarray) -> int:
         active = probabilities >= self.thresholds
         if self.state == GRASP:
             return ALIGN
         if self.state == TRANSFER and not active[GRASPED]:
-            return GRASP if active[ALIGNED] else ALIGN
+            return GRASP
         if self.state == RELEASE:
             if active[GRASPED]:
                 return TRANSFER
-            return GRASP if active[ALIGNED] else ALIGN
+            return RELEASE
         if self.state == RETREAT and not active[RELEASED]:
-            return GRASP if active[ALIGNED] else ALIGN
+            return RELEASE
         return self.state
 
-    def observe(self, probabilities: np.ndarray) -> StateTransition:
+    def observe(
+        self,
+        probabilities: np.ndarray,
+        *,
+        transfer_goal_reached: bool = False,
+    ) -> StateTransition:
         previous = self.state
         self.steps_in_state += 1
         self.cooldown = max(0, self.cooldown - 1)
-        if probabilities[COMPLETE] >= self.thresholds[COMPLETE]:
+        if (
+            self.state == TRANSFER
+            and transfer_goal_reached
+            and probabilities[GRASPED] >= self.thresholds[GRASPED]
+        ):
             self.complete_streak += 1
         else:
             self.complete_streak = 0
@@ -880,9 +960,7 @@ class RecoveryStateMachine:
                 previous, self.state, False, False, False, True
             )
 
-        desired = desired_state_from_probabilities(
-            probabilities, self.thresholds
-        )
+        desired = self._constrained_desired_state(probabilities)
         forced_recovery = False
         max_steps = int(self.settings["max_state_steps"][self.state])
         if self.steps_in_state >= max_steps:
@@ -936,10 +1014,13 @@ def propose_and_score(
     previous: torch.Tensor,
     current: torch.Tensor,
     goal: torch.Tensor,
+    transfer_goal: torch.Tensor,
+    proprio: torch.Tensor,
     state_id: int,
     action_mean: np.ndarray,
     action_scale: np.ndarray,
     settings: dict[str, Any],
+    proprio_settings: dict[str, Any],
     rng: np.random.Generator,
 ) -> dict[str, Any]:
     device = current.device
@@ -950,14 +1031,34 @@ def propose_and_score(
     actual_state = torch.full(
         (1,), state_id, dtype=torch.long, device=device
     )
-    keyframe_target = target_net(previous, current, goal, actual_state)
+    keyframe_target = (
+        transfer_goal
+        if state_id == TRANSFER
+        else target_net(previous, current, goal, actual_state)
+    )
     candidate_previous = previous.expand(count, -1).clone()
     candidate_current = current.expand(count, -1).clone()
     candidate_goal = goal.expand(count, -1)
     candidate_target = keyframe_target.expand(count, -1)
     candidate_state = actual_state.expand(count)
+    candidate_proprio = proprio.expand(count, -1).clone()
     mean_tensor = torch.as_tensor(action_mean, device=device)
     scale_tensor = torch.as_tensor(action_scale, device=device)
+    proprio_action_scale = torch.as_tensor(
+        proprio_settings["proprio_action_scale"],
+        dtype=current.dtype,
+        device=device,
+    )
+    proprio_min = torch.as_tensor(
+        proprio_settings["proprio_min"],
+        dtype=current.dtype,
+        device=device,
+    )
+    proprio_max = torch.as_tensor(
+        proprio_settings["proprio_max"],
+        dtype=current.dtype,
+        device=device,
+    )
     exploration = float(settings["exploration_std"])
     blocks = []
     values_along_path = []
@@ -970,6 +1071,7 @@ def propose_and_score(
             candidate_target,
             candidate_goal,
             candidate_state,
+            candidate_proprio,
         ).reshape(count, block, action_dim)
         noise = torch.from_numpy(
             rng.normal(
@@ -1003,6 +1105,13 @@ def propose_and_score(
         blocks.append(raw_block)
         values_along_path.append(step_value)
         predicted_latents.append(next_latent)
+        candidate_proprio = candidate_proprio + (
+            raw_block[..., :3] * proprio_action_scale
+        ).sum(dim=1)
+        candidate_proprio = torch.minimum(
+            torch.maximum(candidate_proprio, proprio_min),
+            proprio_max,
+        )
         candidate_previous, candidate_current = candidate_current, next_latent
         exploration *= float(settings["exploration_decay"])
 
@@ -1075,15 +1184,16 @@ def update_actor_online(
         target = torch.stack([replay[int(i)][2] for i in indices]).to(device)
         goal = torch.stack([replay[int(i)][3] for i in indices]).to(device)
         state = torch.stack([replay[int(i)][4] for i in indices]).to(device)
+        proprio = torch.stack([replay[int(i)][5] for i in indices]).to(device)
         action_target = torch.stack(
-            [replay[int(i)][5] for i in indices]
+            [replay[int(i)][6] for i in indices]
         ).to(device)
         prediction = actor.mean(
-            previous, current, target, goal, state
+            previous, current, target, goal, state, proprio
         ).reshape(count, actor.action_block, actor.action_dim)
         with torch.no_grad():
             anchor = anchor_actor.mean(
-                previous, current, target, goal, state
+                previous, current, target, goal, state, proprio
             ).reshape(count, actor.action_block, actor.action_dim)
         selected_loss = nn.functional.mse_loss(
             prediction[:, 0], action_target
@@ -1130,6 +1240,43 @@ def semantic_safety_ok(
     return True
 
 
+def render_transfer_goal_for_task(
+    config: dict[str, Any], env
+) -> tuple[np.ndarray, dict[str, Any]]:
+    """Render this task's terminal RGB with the cube still grasped."""
+    settings = config["transfer_goal"]
+    teacher_settings = config["teacher"]
+    controller = PrivilegedTeacher()
+    state, reset_info = env.reset(
+        seed=int(settings["reference_seed"]),
+        options=base.task_reset_options(config),
+    )
+    goal_state = np.asarray(reset_info["goal"], dtype=np.float32)
+
+    for step in range(int(settings["max_steps"]) + 1):
+        value = semantic_state(state, goal_state)
+        distance = float(np.linalg.norm(value.cube - value.goal))
+        grasped = value.contact >= float(teacher_settings["contact_threshold"])
+        if grasped and distance <= float(teacher_settings["goal_xyz_m"]):
+            return np.asarray(env.render()).copy(), {
+                "generation_steps": step,
+                "cube_goal_distance_m": distance,
+                "gripper_contact": float(value.contact),
+                "init_xyz": config["task"]["init_xyz"],
+                "goal_xyz": config["task"]["goal_xyz"],
+            }
+
+        action, _ = controller.action(state, goal_state, teacher_settings)
+        state, _, terminated, truncated, _ = env.step(action)
+        if terminated or truncated:
+            break
+
+    raise RuntimeError(
+        "MuJoCo could not render a grasped transfer goal for the configured task "
+        f"within {settings['max_steps']} steps."
+    )
+
+
 def save_video(path: Path, frames: list[np.ndarray], fps: int) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     imageio.mimsave(path, frames, fps=fps)
@@ -1152,6 +1299,7 @@ def run_online_training(
     settings = config["online_training"]
     planner = config["planner"]
     state_settings = config["state_machine"]
+    transfer_goal_settings = config["transfer_goal"]
     rng = np.random.default_rng(
         int(config["seed"]) + int(settings["seed_offset"])
     )
@@ -1169,13 +1317,29 @@ def run_online_training(
     replay = deque(maxlen=int(settings["replay_capacity"]))
     log_path.unlink(missing_ok=True)
     video_dir.mkdir(parents=True, exist_ok=True)
+    transfer_goal_image, transfer_goal_metadata = render_transfer_goal_for_task(
+        config, env
+    )
+    transfer_goal_latent = base.encode_image(
+        world_model, transfer_goal_image, transform, device
+    )
+    transfer_goal_image_path = video_dir / "transfer_goal_rgb.png"
+    imageio.imwrite(transfer_goal_image_path, transfer_goal_image)
+    print(
+        json.dumps(
+            {
+                "transfer_goal_rgb": str(transfer_goal_image_path),
+                **base.json_value(transfer_goal_metadata),
+            }
+        )
+    )
     episode_results = []
     world_model_seconds = 0.0
     world_model_calls = 0
     total_recoveries = 0
 
     for episode in range(int(settings["episodes"])):
-        _, reset_info = env.reset(
+        current_state, reset_info = env.reset(
             seed=int(config["seed"]) + int(settings["seed_offset"]) + episode,
             options=base.task_reset_options(config),
         )
@@ -1188,11 +1352,17 @@ def run_online_training(
             world_model, current_image, transform, device
         )
         previous_latent = current_latent.clone()
+        current_proprio = torch.from_numpy(
+            arm_proprio(current_state)
+        ).to(device).unsqueeze(0)
+        previous_proprio = current_proprio.clone()
         current_probabilities_t = semantic_probabilities(
             semantic_net,
             previous_latent,
             current_latent,
             goal_latent,
+            previous_proprio,
+            current_proprio,
         )
         current_probabilities = (
             current_probabilities_t.detach().cpu().numpy()
@@ -1222,10 +1392,13 @@ def run_online_training(
                 previous=previous_latent,
                 current=current_latent,
                 goal=goal_latent,
+                transfer_goal=transfer_goal_latent,
+                proprio=current_proprio,
                 state_id=state_id,
                 action_mean=action_mean,
                 action_scale=action_scale,
                 settings=planner,
+                proprio_settings=config["model"],
                 rng=rng,
             )
             if device.type == "cuda":
@@ -1255,6 +1428,14 @@ def run_online_training(
 
             for plan_action_index in range(execute_steps):
                 state_before = state_machine.state
+                current_transfer_goal_mse = float(
+                    (current_latent - transfer_goal_latent)
+                    .square()
+                    .mean()
+                    .detach()
+                    .cpu()
+                    .item()
+                )
                 state_tensor = torch.full(
                     (1,), state_before, dtype=torch.long, device=device
                 )
@@ -1272,8 +1453,11 @@ def run_online_training(
                     base_action, planned_action, blend
                 ).clamp(-1.0, 1.0)
                 action = executed_action.detach().cpu().numpy()
-                _, _, terminated, truncated, info = env.step(action)
+                next_state, _, terminated, truncated, info = env.step(action)
                 environment_step += 1
+                next_proprio = torch.from_numpy(
+                    arm_proprio(next_state)
+                ).to(device).unsqueeze(0)
                 oracle_success_current = bool(info.get("success", False))
                 next_image = np.asarray(env.render()).copy()
                 next_latent = base.encode_image(
@@ -1295,16 +1479,38 @@ def run_online_training(
                     current_latent,
                     next_latent,
                     goal_latent,
+                    current_proprio,
+                    next_proprio,
                 )
                 next_probabilities = (
                     next_probabilities_t.detach().cpu().numpy()
                 )
-                semantic_progress = active_semantic_progress(
-                    current_probabilities,
-                    next_probabilities,
-                    state_before,
+                transfer_goal_mse = float(
+                    (next_latent - transfer_goal_latent)
+                    .square()
+                    .mean()
+                    .detach()
+                    .cpu()
+                    .item()
                 )
-                transition = state_machine.observe(next_probabilities)
+                transfer_goal_reached = (
+                    state_before == TRANSFER
+                    and transfer_goal_mse
+                    <= float(transfer_goal_settings["latent_mse_threshold"])
+                )
+                semantic_progress = (
+                    current_transfer_goal_mse - transfer_goal_mse
+                    if state_before == TRANSFER
+                    else active_semantic_progress(
+                        current_probabilities,
+                        next_probabilities,
+                        state_before,
+                    )
+                )
+                transition = state_machine.observe(
+                    next_probabilities,
+                    transfer_goal_reached=transfer_goal_reached,
+                )
                 if transition.changed:
                     state_history.append(transition.current)
 
@@ -1336,6 +1542,7 @@ def run_online_training(
                             keyframe_target[0].detach().cpu(),
                             goal_latent[0].detach().cpu(),
                             torch.tensor(state_before, dtype=torch.long),
+                            current_proprio[0].detach().cpu(),
                             torch.lerp(
                                 base_action,
                                 proposal["elite_plan"][plan_action_index],
@@ -1373,6 +1580,11 @@ def run_online_training(
                         for index, name in enumerate(PREDICATE_NAMES)
                     },
                     "visually_complete": transition.visually_complete,
+                    "transfer_goal_mse": transfer_goal_mse,
+                    "transfer_goal_reached": transfer_goal_reached,
+                    "transfer_goal_mse_threshold": float(
+                        transfer_goal_settings["latent_mse_threshold"]
+                    ),
                     "oracle_success_for_metrics_only": oracle_success_current,
                     "planner_advantage": planner_advantage,
                     "best_candidate": best_index,
@@ -1405,6 +1617,8 @@ def run_online_training(
                     "online_sample_accepted": accepted,
                     "adaptation_loss": adaptation_loss,
                     "executed_action": action,
+                    "current_effector_proprio": current_proprio,
+                    "next_effector_proprio": next_proprio,
                     "world_model_inference_seconds": (
                         elapsed if plan_action_index == 0 else 0.0
                     ),
@@ -1420,6 +1634,11 @@ def run_online_training(
 
                 frames.append(next_image)
                 previous_latent, current_latent = current_latent, next_latent
+                current_state = next_state
+                previous_proprio, current_proprio = (
+                    current_proprio,
+                    next_proprio,
+                )
                 current_probabilities = next_probabilities
                 if (
                     transition.visually_complete
@@ -1432,9 +1651,7 @@ def run_online_training(
             if state_machine.visually_complete or terminated or truncated:
                 break
 
-        success = bool(
-            state_machine.visually_complete and oracle_success_current
-        )
+        success = bool(state_machine.visually_complete)
         status = "success" if success else "failed"
         video_path = video_dir / (
             f"recovery_online_episode_{episode}_{status}.mp4"
@@ -1465,6 +1682,11 @@ def run_online_training(
         "episodes": int(settings["episodes"]),
         "successes": int(sum(item["success"] for item in episode_results)),
         "total_recoveries": total_recoveries,
+        "transfer_goal_rgb": str(transfer_goal_image_path),
+        "transfer_goal": base.json_value(transfer_goal_metadata),
+        "transfer_goal_mse_threshold": float(
+            transfer_goal_settings["latent_mse_threshold"]
+        ),
         "world_model_inference_seconds": world_model_seconds,
         "world_model_calls": world_model_calls,
         "mean_world_model_inference_seconds": world_model_seconds
@@ -1486,9 +1708,13 @@ def main() -> None:
     device = torch.device(config["device"])
     output_dir = config["paths"]["output_dir"]
     output_dir.mkdir(parents=True, exist_ok=True)
-    dataset_path = output_dir / "data" / "recovery_semantic_latents.npz"
+    dataset_path = (
+        output_dir / "data" / "recovery_temporal_proprio_latents.npz"
+    )
     offline_checkpoint = (
-        output_dir / "checkpoints" / "recovery_actor_offline.pt"
+        output_dir
+        / "checkpoints"
+        / "recovery_temporal_proprio_actor_offline.pt"
     )
     final_checkpoint = (
         output_dir / "checkpoints" / f"{args.run_name}_actor_final.pt"

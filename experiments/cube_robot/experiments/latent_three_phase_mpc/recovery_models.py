@@ -50,18 +50,20 @@ def control_features(
 
 
 class VisualSemanticNet(nn.Module):
-    """Predict RGB-only manipulation predicates used by the recovery FSM."""
+    """Predict manipulation predicates from latent and proprioceptive state."""
 
     def __init__(
         self,
         latent_dim: int,
         hidden_dim: int,
         predicate_count: int,
+        proprio_dim: int = 0,
     ) -> None:
         super().__init__()
         self.predicate_count = predicate_count
+        self.proprio_dim = proprio_dim
         self.network = _mlp(
-            4 * latent_dim,
+            4 * latent_dim + 3 * proprio_dim,
             hidden_dim,
             predicate_count,
         )
@@ -71,8 +73,30 @@ class VisualSemanticNet(nn.Module):
         previous: torch.Tensor,
         current: torch.Tensor,
         goal: torch.Tensor,
+        previous_proprio: torch.Tensor | None = None,
+        current_proprio: torch.Tensor | None = None,
     ) -> torch.Tensor:
-        return self.network(goal_features(previous, current, goal))
+        features = goal_features(previous, current, goal)
+        if self.proprio_dim:
+            shape = (*features.shape[:-1], self.proprio_dim)
+            if previous_proprio is None:
+                previous_proprio = torch.zeros(
+                    shape, dtype=features.dtype, device=features.device
+                )
+            if current_proprio is None:
+                current_proprio = torch.zeros(
+                    shape, dtype=features.dtype, device=features.device
+                )
+            features = torch.cat(
+                [
+                    features,
+                    previous_proprio,
+                    current_proprio,
+                    current_proprio - previous_proprio,
+                ],
+                dim=-1,
+            )
+        return self.network(features)
 
 
 class RecoveryTargetNet(nn.Module):
@@ -115,14 +139,16 @@ class RecoveryBlockActor(nn.Module):
         action_block: int,
         hidden_dim: int,
         state_count: int,
+        proprio_dim: int = 0,
     ) -> None:
         super().__init__()
         self.action_dim = action_dim
         self.action_block = action_block
         self.output_dim = action_dim * action_block
         self.state_count = state_count
+        self.proprio_dim = proprio_dim
         self.network = _mlp(
-            6 * latent_dim + state_count,
+            6 * latent_dim + state_count + proprio_dim,
             hidden_dim,
             self.output_dim,
         )
@@ -134,6 +160,7 @@ class RecoveryBlockActor(nn.Module):
         target: torch.Tensor,
         goal: torch.Tensor,
         state: torch.Tensor,
+        proprio: torch.Tensor | None = None,
     ) -> torch.Tensor:
         features = control_features(
             previous,
@@ -143,6 +170,14 @@ class RecoveryBlockActor(nn.Module):
             state,
             self.state_count,
         )
+        if self.proprio_dim:
+            if proprio is None:
+                proprio = torch.zeros(
+                    (*features.shape[:-1], self.proprio_dim),
+                    dtype=features.dtype,
+                    device=features.device,
+                )
+            features = torch.cat([features, proprio], dim=-1)
         return torch.tanh(self.network(features))
 
 

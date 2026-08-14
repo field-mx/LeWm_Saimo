@@ -1,0 +1,250 @@
+{
+  "online_training": {
+    "mode": "recovery_online_train",
+    "episodes": 10,
+    "successes": 1,
+    "total_recoveries": 26,
+    "transfer_goal_rgb": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/videos/dynamic_transfer_goal_from_initial_actor_round1/transfer_goal_rgb.png",
+    "transfer_goal": {
+      "generation_steps": 50,
+      "cube_goal_distance_m": 0.029725151136517525,
+      "gripper_contact": 0.9881444573402405,
+      "init_xyz": [
+        0.4,
+        -0.15,
+        0.02
+      ],
+      "goal_xyz": [
+        0.35,
+        0.2,
+        0.02
+      ]
+    },
+    "transfer_goal_mse_threshold": 0.017,
+    "world_model_inference_seconds": 56.17470327857882,
+    "world_model_calls": 1845,
+    "mean_world_model_inference_seconds": 0.03044699364692619,
+    "episode_results": [
+      {
+        "episode": 0,
+        "steps": 200,
+        "success": false,
+        "visually_complete": false,
+        "oracle_success_for_metrics_only": false,
+        "terminated": false,
+        "truncated": true,
+        "state_history": [
+          "align",
+          "grasp",
+          "transfer",
+          "grasp",
+          "transfer",
+          "grasp",
+          "align"
+        ],
+        "recoveries": 3,
+        "accepted_online_samples": 89,
+        "online_updates": 82,
+        "video": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/videos/dynamic_transfer_goal_from_initial_actor_round1/recovery_online_episode_0_failed.mp4"
+      },
+      {
+        "episode": 1,
+        "steps": 200,
+        "success": false,
+        "visually_complete": false,
+        "oracle_success_for_metrics_only": false,
+        "terminated": false,
+        "truncated": true,
+        "state_history": [
+          "align",
+          "grasp",
+          "transfer",
+          "grasp",
+          "align"
+        ],
+        "recoveries": 2,
+        "accepted_online_samples": 101,
+        "online_updates": 101,
+        "video": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/videos/dynamic_transfer_goal_from_initial_actor_round1/recovery_online_episode_1_failed.mp4"
+      },
+      {
+        "episode": 2,
+        "steps": 200,
+        "success": false,
+        "visually_complete": false,
+        "oracle_success_for_metrics_only": false,
+        "terminated": false,
+        "truncated": true,
+        "state_history": [
+          "align",
+          "grasp",
+          "transfer",
+          "grasp",
+          "align",
+          "grasp",
+          "align",
+          "grasp",
+          "align",
+          "grasp"
+        ],
+        "recoveries": 4,
+        "accepted_online_samples": 104,
+        "online_updates": 104,
+        "video": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/videos/dynamic_transfer_goal_from_initial_actor_round1/recovery_online_episode_2_failed.mp4"
+      },
+      {
+        "episode": 3,
+        "steps": 45,
+        "success": true,
+        "visually_complete": true,
+        "oracle_success_for_metrics_only": true,
+        "terminated": false,
+        "truncated": false,
+        "state_history": [
+          "align",
+          "grasp",
+          "transfer"
+        ],
+        "recoveries": 0,
+        "accepted_online_samples": 28,
+        "online_updates": 28,
+        "video": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/videos/dynamic_transfer_goal_from_initial_actor_round1/recovery_online_episode_3_success.mp4"
+      },
+      {
+        "episode": 4,
+        "steps": 200,
+        "success": false,
+        "visually_complete": false,
+        "oracle_success_for_metrics_only": false,
+        "terminated": false,
+        "truncated": true,
+        "state_history": [
+          "align",
+          "grasp",
+          "transfer",
+          "grasp",
+          "align",
+          "grasp",
+          "align",
+          "grasp",
+          "align",
+          "grasp"
+        ],
+        "recoveries": 4,
+        "accepted_online_samples": 82,
+        "online_updates": 82,
+        "video": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/videos/dynamic_transfer_goal_from_initial_actor_round1/recovery_online_episode_4_failed.mp4"
+      },
+      {
+        "episode": 5,
+        "steps": 200,
+        "success": false,
+        "visually_complete": false,
+        "oracle_success_for_metrics_only": false,
+        "terminated": false,
+        "truncated": true,
+        "state_history": [
+          "align",
+          "grasp",
+          "transfer",
+          "grasp",
+          "align",
+          "grasp",
+          "transfer",
+          "grasp",
+          "transfer",
+          "grasp",
+          "align",
+          "grasp",
+          "transfer",
+          "grasp",
+          "align",
+          "grasp",
+          "transfer"
+        ],
+        "recoveries": 7,
+        "accepted_online_samples": 123,
+        "online_updates": 123,
+        "video": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/videos/dynamic_transfer_goal_from_initial_actor_round1/recovery_online_episode_5_failed.mp4"
+      },
+      {
+        "episode": 6,
+        "steps": 200,
+        "success": false,
+        "visually_complete": false,
+        "oracle_success_for_metrics_only": false,
+        "terminated": false,
+        "truncated": true,
+        "state_history": [
+          "align",
+          "grasp",
+          "transfer",
+          "grasp",
+          "align"
+        ],
+        "recoveries": 2,
+        "accepted_online_samples": 101,
+        "online_updates": 101,
+        "video": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/videos/dynamic_transfer_goal_from_initial_actor_round1/recovery_online_episode_6_failed.mp4"
+      },
+      {
+        "episode": 7,
+        "steps": 200,
+        "success": false,
+        "visually_complete": false,
+        "oracle_success_for_metrics_only": false,
+        "terminated": false,
+        "truncated": true,
+        "state_history": [
+          "align",
+          "grasp",
+          "align"
+        ],
+        "recoveries": 1,
+        "accepted_online_samples": 122,
+        "online_updates": 122,
+        "video": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/videos/dynamic_transfer_goal_from_initial_actor_round1/recovery_online_episode_7_failed.mp4"
+      },
+      {
+        "episode": 8,
+        "steps": 200,
+        "success": false,
+        "visually_complete": false,
+        "oracle_success_for_metrics_only": false,
+        "terminated": false,
+        "truncated": true,
+        "state_history": [
+          "align",
+          "grasp",
+          "align"
+        ],
+        "recoveries": 1,
+        "accepted_online_samples": 85,
+        "online_updates": 85,
+        "video": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/videos/dynamic_transfer_goal_from_initial_actor_round1/recovery_online_episode_8_failed.mp4"
+      },
+      {
+        "episode": 9,
+        "steps": 200,
+        "success": false,
+        "visually_complete": false,
+        "oracle_success_for_metrics_only": false,
+        "terminated": false,
+        "truncated": true,
+        "state_history": [
+          "align",
+          "grasp",
+          "transfer",
+          "grasp",
+          "align"
+        ],
+        "recoveries": 2,
+        "accepted_online_samples": 101,
+        "online_updates": 101,
+        "video": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/videos/dynamic_transfer_goal_from_initial_actor_round1/recovery_online_episode_9_failed.mp4"
+      }
+    ],
+    "checkpoint": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/checkpoints/dynamic_transfer_goal_from_initial_actor_round1_actor_final.pt",
+    "source_checkpoint": "/home/muxiang/work/LeWm_Saimo/experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/checkpoints/recovery_cube_semantic_actor.pt"
+  }
+}
