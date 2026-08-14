@@ -1891,9 +1891,12 @@ def main() -> None:
 
     transform = base.build_transform(int(config["image_size"]))
     world_model = base.load_world_model(config["paths"]["model_dir"], device)
-    action_mean, action_scale = base.load_action_stats(
-        config["paths"]["action_dataset"]
-    )
+    action_mean = None
+    action_scale = None
+    if args.stage in ("train", "all"):
+        action_mean, action_scale = base.load_action_stats(
+            config["paths"]["action_dataset"]
+        )
     summary: dict[str, Any] = {
         "architecture": {
             "runtime_inputs": [
@@ -1977,6 +1980,8 @@ def main() -> None:
             model.eval().requires_grad_(False)
         trained_models[-1].eval().requires_grad_(False)
         trained_models[-2].eval()
+        if action_mean is None or action_scale is None:
+            raise RuntimeError("Checkpoint did not provide action statistics.")
         summary["online_training"] = run_online(
             config=config,
             models=trained_models,
