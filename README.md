@@ -46,6 +46,7 @@ CEM 采样动作链 ----------+
 ![专家轨迹逐帧 latent 与最终目标 latent 的 MSE](expert_latent_goal_mse.png)
 
 横轴是专家轨迹步长，纵轴是当前帧 latent 与最终目标 latent 的 MSE。各条专家轨迹及平均曲线均不是单调下降。即使专家正在执行正确动作，latent 距离也可能暂时增大，例如机械臂需要先抬升、绕行、重新对齐或调整夹爪姿态。
+
 进一步的，我们分析了rgb图像对应的latent差的实时对应情况。
 <p align="center">
   <img src="./assets/actor分析.gif" alt="任务运行演示">
