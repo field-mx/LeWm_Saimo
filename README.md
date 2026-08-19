@@ -17,7 +17,7 @@
 ### 原生规划方式
 
 <p align="center">
-  <img src="./assets/改造前视频.gif" alt="latent差驱动cem规划">
+  <img src="./assets/改造前.gif" alt="latent差驱动cem规划">
 </p>
 
 原生 LeWM 将当前 RGB 和目标 RGB 编码到 latent 空间。CEM 从动作分布中采样候选动作链，LeWM 预测每条动作链执行后的 latent，规划器选择预测结果最接近目标 latent 的动作链：
