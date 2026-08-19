@@ -1,4 +1,0 @@
-{"episode": 0, "frames": 121, "success": false, "state_counts": {"align": 16, "grasp": 76, "transfer": 29}}
-{"episode": 1, "frames": 121, "success": false, "state_counts": {"align": 22, "grasp": 71, "transfer": 28}}
-{"episode": 2, "frames": 121, "success": false, "state_counts": {"align": 13, "grasp": 80, "transfer": 28}}
-{"episode": 3, "frames": 121, "success": false, "state_counts": {"align": 35, "grasp": 58, "transfer": 28}}
