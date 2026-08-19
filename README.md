@@ -185,7 +185,7 @@ L = 2.0 * semantic_loss
 | LeWM 总推理时间 | 53.80 秒 |
 | LeWM 平均推理时间 | 31.70 ms/次 |
 
-`10/10` 统计的是状态机成功确认抓握、并进入 TRANSFER 的回合数，是本版本最值得关注的改进。系统任务成功要求当前 latent 与 transfer-goal latent 的 MSE 连续达到阈值；Episode 8 虽在 MuJoCo 物理判定中成功，但没有连续达到该 latent 阈值，因此系统统计为失败。这说明剩余主要问题是转移规划与视觉完成判定的校准，而不是抓握确认。
+`9/10` 统计的是状态机成功确认抓握、并进入 TRANSFER 的回合数，是本版本最值得关注的改进。系统任务成功要求当前 latent 与 transfer-goal latent 的 MSE 连续达到阈值；Episode 8 虽在 MuJoCo 物理判定中成功，但没有连续达到该 latent 阈值，因此系统统计为失败。这说明剩余主要问题是转移规划与视觉完成判定的校准，而不是抓握确认。
 
 | 对比项 | 原生 LeWM + CEM | Proprio V2 |
 | --- | --- | --- |
@@ -195,15 +195,69 @@ L = 2.0 * semantic_loss
 | 状态信息 | RGB latent | RGB latent + 6 维机械臂本体状态 |
 | 执行方式 | 短期规划闭环 | 每次仅执行 1 个真实动作再规划 |
 | 抓握阶段 | 无任务级语义确认 | 显式 ALIGN/GRASP/TRANSFER 状态机 |
-| 本轮抓握确认 | 不稳定 | **10/10** |
+| 本轮抓握确认 | 不稳定 | **7/10** |
 
 演示视频为真实 MuJoCo 渲染：
 
-- [10 个完整在线 episode](experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/proprio_v2/videos/proprio_v2_round1/)
-- [Episode 1：系统成功](experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/proprio_v2/videos/proprio_v2_round1/proprio_v2_episode_1_success.mp4)
-- [Episode 6：系统成功](experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/proprio_v2/videos/proprio_v2_round1/proprio_v2_episode_6_success.mp4)
-- [任务专属 transfer-goal 图像](experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/proprio_v2/videos/proprio_v2_round1/transfer_goal_rgb.png)
-- [逐回合结果与耗时](experiments/cube_robot/experiments/latent_three_phase_mpc/outputs/proprio_v2/proprio_v2_round1_summary.json)
+<h2 align="center">仿真结果</h2>
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="./assets/0.gif" width="130" alt="Experiment 1">
+      <br>
+      <strong>Experiment 1</strong>
+    </td>
+    <td align="center">
+      <img src="./assets/1.gif" width="130" alt="Experiment 2">
+      <br>
+      <strong>Experiment 2</strong>
+    </td>
+    <td align="center">
+      <img src="./assets/2.gif" width="130" alt="Experiment 3">
+      <br>
+      <strong>Experiment 3</strong>
+    </td>
+    <td align="center">
+      <img src="./assets/3.gif" width="130" alt="Experiment 4">
+      <br>
+      <strong>Experiment 4</strong>
+    </td>
+    <td align="center">
+      <img src="./assets/4.gif" width="130" alt="Experiment 5">
+      <br>
+      <strong>Experiment 5</strong>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <img src="./assets/5.gif" width="130" alt="Experiment 6">
+      <br>
+      <strong>Experiment 6</strong>
+    </td>
+    <td align="center">
+      <img src="./assets/6.gif" width="130" alt="Experiment 7">
+      <br>
+      <strong>Experiment 7</strong>
+    </td>
+    <td align="center">
+      <img src="./assets/7.gif" width="130" alt="Experiment 8">
+      <br>
+      <strong>Experiment 8</strong>
+    </td>
+    <td align="center">
+      <img src="./assets/8.gif" width="130" alt="Experiment 9">
+      <br>
+      <strong>Experiment 9</strong>
+    </td>
+    <td align="center">
+      <img src="./assets/9.gif" width="130" alt="Experiment 10">
+      <br>
+      <strong>Experiment 10</strong>
+    </td>
+  </tr>
+</table>
 
 ## 结论
 
