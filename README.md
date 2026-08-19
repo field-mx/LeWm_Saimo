@@ -17,7 +17,7 @@
 ### 原生规划方式
 
 <p align="center">
-  <img src="./assets/改造前视频.gif" alt="原生规划方式效果">
+  <img src="./assets/改造前视频.gif" alt="latent差驱动cem规划">
 </p>
 
 原生 LeWM 将当前 RGB 和目标 RGB 编码到 latent 空间。CEM 从动作分布中采样候选动作链，LeWM 预测每条动作链执行后的 latent，规划器选择预测结果最接近目标 latent 的动作链：
@@ -49,7 +49,7 @@ CEM 采样动作链 ----------+
 
 进一步的，我们分析了rgb图像对应的latent差的实时对应情况。
 <p align="center">
-  <img src="./assets/actor分析.gif" alt="任务运行演示">
+  <img src="./assets/actor分析.gif" alt="latent驱动信号逐帧分析">
 </p>
 
 由视频可知，在抓取精细操作以及抬臂、转移动作，latent空间的驱动信号并非单调递减，现有架构存在**规划目标与任务进度不一致**的问题：
