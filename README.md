@@ -204,27 +204,27 @@ L = 2.0 * semantic_loss
 <table>
   <tr>
     <td align="center">
-      <img src="./assets/0.gif" width="130" alt="Experiment 1">
+      <img src="./assets/0.gif" width="150" alt="Experiment 1">
       <br>
       <strong>Experiment 1</strong>
     </td>
     <td align="center">
-      <img src="./assets/1.gif" width="130" alt="Experiment 2">
+      <img src="./assets/1.gif" width="150" alt="Experiment 2">
       <br>
       <strong>Experiment 2</strong>
     </td>
     <td align="center">
-      <img src="./assets/2.gif" width="130" alt="Experiment 3">
+      <img src="./assets/2.gif" width="150" alt="Experiment 3">
       <br>
       <strong>Experiment 3</strong>
     </td>
     <td align="center">
-      <img src="./assets/3.gif" width="130" alt="Experiment 4">
+      <img src="./assets/3.gif" width="150" alt="Experiment 4">
       <br>
       <strong>Experiment 4</strong>
     </td>
     <td align="center">
-      <img src="./assets/4.gif" width="130" alt="Experiment 5">
+      <img src="./assets/4.gif" width="150" alt="Experiment 5">
       <br>
       <strong>Experiment 5</strong>
     </td>
@@ -232,27 +232,27 @@ L = 2.0 * semantic_loss
 
   <tr>
     <td align="center">
-      <img src="./assets/5.gif" width="130" alt="Experiment 6">
+      <img src="./assets/5.gif" width="150" alt="Experiment 6">
       <br>
       <strong>Experiment 6</strong>
     </td>
     <td align="center">
-      <img src="./assets/6.gif" width="130" alt="Experiment 7">
+      <img src="./assets/6.gif" width="150" alt="Experiment 7">
       <br>
       <strong>Experiment 7</strong>
     </td>
     <td align="center">
-      <img src="./assets/7.gif" width="130" alt="Experiment 8">
+      <img src="./assets/7.gif" width="150" alt="Experiment 8">
       <br>
       <strong>Experiment 8</strong>
     </td>
     <td align="center">
-      <img src="./assets/8.gif" width="130" alt="Experiment 9">
+      <img src="./assets/8.gif" width="150" alt="Experiment 9">
       <br>
       <strong>Experiment 9</strong>
     </td>
     <td align="center">
-      <img src="./assets/9.gif" width="130" alt="Experiment 10">
+      <img src="./assets/9.gif" width="150" alt="Experiment 10">
       <br>
       <strong>Experiment 10</strong>
     </td>
