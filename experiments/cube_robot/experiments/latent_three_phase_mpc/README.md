@@ -4,27 +4,27 @@
 
 视频均由 MuJoCo 真实仿真渲染。LeWM 不生成视频，只预测候选动作链在 latent 空间中的短期结果，并参与 MPC 动作评分。
 
-## 核心结果：抓握确认率 10/10
+## 核心结果：抓握确认率 7/10
 
 正式在线实验运行 10 个 episode，结果如下：
 
 | 指标 | 结果 | 含义 |
 | --- | ---: | --- |
-| 抓握确认率 | **10/10** | 状态机满足抓握判定并进入 `TRANSFER` 的 episode 数。 |
+| 抓握确认率 | **7/10** | 状态机满足抓握判定并进入 `TRANSFER` 的 episode 数。 |
 | 系统任务成功率 | 2/10 | 当前 latent 与 transfer-goal latent 连续达到完成阈值。 |
 | MuJoCo 物理成功率 | 3/10 | 仿真器物理 success 为真；Episode 8 物理完成但没有通过连续 latent 阈值。 |
 | LeWM 调用次数 | 1697 | 全部 10 个 episode 的合计。 |
 | LeWM 平均推理时间 | 31.70 ms/次 | 世界模型总推理时间 53.80 秒。 |
 
-抓握确认率是本版本最重要的改进：所有 episode 都完成了 `ALIGN -> GRASP -> TRANSFER` 的确认切换。当前主要瓶颈已经转移到抓握后的物块搬运与目标放置。
+当前主要瓶颈已经转移到抓握后的物块搬运与目标放置。
 
-这里的 `10/10` 是本状态机定义下的抓握确认，不等价于 10/10 完整任务成功；结果来自固定任务和有限样本，不能直接视为跨任务泛化能力。
+结果来自固定任务和有限样本，不能直接视为跨任务泛化能力。
 
 视频与结果：
 
 - [全部 10 个在线实验视频](outputs/proprio_v2/videos/proprio_v2_round1/)
-- [Episode 1：系统成功](outputs/proprio_v2/videos/proprio_v2_round1/proprio_v2_episode_1_success.mp4)
-- [Episode 6：系统成功](outputs/proprio_v2/videos/proprio_v2_round1/proprio_v2_episode_6_success.mp4)
+- [Episode 1：系统判定任务成功](outputs/proprio_v2/videos/proprio_v2_round1/proprio_v2_episode_1_success.mp4)
+- [Episode 6：系统判定任务成功](outputs/proprio_v2/videos/proprio_v2_round1/proprio_v2_episode_6_success.mp4)
 - [任务专属 transfer goal RGB](outputs/proprio_v2/videos/proprio_v2_round1/transfer_goal_rgb.png)
 - [完整结果汇总](outputs/proprio_v2/proprio_v2_round1_summary.json)
 
